@@ -25,7 +25,7 @@ Options: `--version v0.1.0`, `--dir DIR`, `--no-model` (pass them as `sh -s -- -
 
 Releases exist for macOS arm64 and Linux amd64/arm64 (glibc 2.36+: Debian 12, Ubuntu 22.04, RHEL 9 and newer). Intel macOS is not supported, because ONNX Runtime publishes no prebuilt library for it.
 
-**Windows**: there is no native build yet. Use [WSL](https://learn.microsoft.com/windows/wsl/install) and install the Linux build inside it with the `install.sh` command above. A Windows-side MCP client can start the server through WSL:
+**Windows**: there is no native build yet. Use [WSL](https://learn.microsoft.com/windows/wsl/install) and install the Linux build inside it with the `install.sh` command above. A Windows-side MCP client can start the server through WSL. Use the full path, because `wsl` does not read your shell profile, so `~/.local/bin` may not be on its PATH:
 
 ```json
 {"mcpServers": {"docgraph": {"type": "stdio", "command": "wsl", "args": ["/home/me/.local/bin/docgraph", "mcp", "--project", "/home/me/project"]}}}
