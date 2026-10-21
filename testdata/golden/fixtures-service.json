@@ -1,0 +1,199 @@
+[
+ {
+  "tool": "search",
+  "args": {
+   "mode": "keyword",
+   "query": "closing an inventory"
+  },
+  "output": "[1] Inventory.md:17-20\nSection: Inventory > Closing an inventory\n\n## Closing an inventory\n\nAn inventory can be closed when every location is synchronized.\nAfter closing, missing assets get the \"Missing\" status.\n\n---\n\n[2] Inventory.md:5-7\nSection: Inventory > Starting an inventory\n\n## Starting an inventory\n\nAn administrator can start an inventory in the web admin UI.\n\n---\n\n[3] Inventory.md:9-11\nSection: Inventory > Starting an inventory > Permissions\n\n### Permissions\n\nOnly users with the Inventory Manager role can start an inventory.\n\n---\n\n[4] Inventory.md:13-15\nSection: Inventory > Starting an inventory > Selecting locations\n\n### Selecting locations\n\nOne or more locations must be selected from the hierarchy.\n\n---\n\n[5] Inventory.md:1-3\nSection: Inventory\n\n# Inventory\n\nAn inventory is the process of checking fixed assets.\n\n---\n\n[6] Docs/inventory_states.puml:1-6\nSection: inventory_states > Inventory state machine\n\n@startuml inventory_states\ntitle Inventory state machine\n[*] --> Open\nOpen --> Closed : close\nClosed --> [*]\n@enduml"
+ },
+ {
+  "tool": "search",
+  "args": {
+   "mode": "keyword",
+   "query": "synchronization",
+   "top_k": 2
+  },
+  "output": "[1] Processes/Café-walkthrough.md:5-7\nSection: Café walkthrough > Walkthrough > Synchronization\n\n### Synchronization\n\nThe mobile app works offline; synchronization happens when the network is back.\n\n(Other sections in this file: Walkthrough (1-3))"
+ },
+ {
+  "tool": "search",
+  "args": {
+   "mode": "keyword",
+   "query": "push transactions"
+  },
+  "output": "[1] Docs/sync.mmd:1-5\nSection: Sync flow\n\n---\ntitle: Sync flow\n---\nsequenceDiagram\n  Mobile->>Server: push transactions"
+ },
+ {
+  "tool": "search",
+  "args": {
+   "mode": "keyword",
+   "query": "zzzqqq"
+  },
+  "output": "No results."
+ },
+ {
+  "tool": "search",
+  "args": {
+   "mode": "keyword",
+   "query": "   "
+  },
+  "output": "No results."
+ },
+ {
+  "tool": "read_document",
+  "args": {
+   "path": "Inventory.md"
+  },
+  "output": "Inventory.md (lines 1-20 of 20)\n\n# Inventory\n\nAn inventory is the process of checking fixed assets.\n\n## Starting an inventory\n\nAn administrator can start an inventory in the web admin UI.\n\n### Permissions\n\nOnly users with the Inventory Manager role can start an inventory.\n\n### Selecting locations\n\nOne or more locations must be selected from the hierarchy.\n\n## Closing an inventory\n\nAn inventory can be closed when every location is synchronized.\nAfter closing, missing assets get the \"Missing\" status."
+ },
+ {
+  "tool": "read_document",
+  "args": {
+   "end_line": 9,
+   "path": "Inventory.md",
+   "start_line": 5
+  },
+  "output": "Inventory.md (lines 5-9 of 20)\n\n## Starting an inventory\n\nAn administrator can start an inventory in the web admin UI.\n\n### Permissions"
+ },
+ {
+  "tool": "read_document",
+  "args": {
+   "path": "Docs/sync.mmd",
+   "start_line": 3
+  },
+  "output": "Docs/sync.mmd (lines 3-5 of 5)\n\n---\nsequenceDiagram\n  Mobile->>Server: push transactions"
+ },
+ {
+  "tool": "read_document",
+  "args": {
+   "path": "Inventory.md",
+   "start_line": 500
+  },
+  "output": "Inventory.md (lines 500-20 of 20)\n\n"
+ },
+ {
+  "tool": "read_document",
+  "args": {
+   "path": "Processes/Café-walkthrough.md"
+  },
+  "output": "Processes/Café-walkthrough.md (lines 1-7 of 7)\n\n## Walkthrough\n\nA walkthrough is a simplified process for small sites such as a café; it does not change the master state of assets.\n\n### Synchronization\n\nThe mobile app works offline; synchronization happens when the network is back."
+ },
+ {
+  "tool": "read_document",
+  "args": {
+   "path": "missing.md"
+  },
+  "output": "Not an indexed document: missing.md. Use list_documents or search to find paths."
+ },
+ {
+  "tool": "read_document",
+  "args": {
+   "path": "../go.mod"
+  },
+  "output": "Not an indexed document: ../go.mod. Use list_documents or search to find paths."
+ },
+ {
+  "tool": "list_documents",
+  "args": {},
+  "output": "Docs/Api.md | API | 2 sections\nDocs/inventory_states.puml | Inventory state machine | 1 sections\nDocs/sync.mmd | Sync flow | 1 sections\nInventory.md | Inventory | 5 sections\nProcesses/Café-walkthrough.md | Café walkthrough | 2 sections\nnotes.txt | notes | 1 sections"
+ },
+ {
+  "tool": "list_documents",
+  "args": {
+   "path_glob": "Docs/*"
+  },
+  "output": "Docs/Api.md | API | 2 sections\nDocs/inventory_states.puml | Inventory state machine | 1 sections\nDocs/sync.mmd | Sync flow | 1 sections"
+ },
+ {
+  "tool": "list_documents",
+  "args": {
+   "path_glob": "*.puml"
+  },
+  "output": "Docs/inventory_states.puml | Inventory state machine | 1 sections"
+ },
+ {
+  "tool": "grep",
+  "args": {
+   "pattern": "inventory"
+  },
+  "output": "Docs/inventory_states.puml (2 matches)\n  1: @startuml inventory_states\n  2: title Inventory state machine\n\nInventory.md (7 matches)\n  1: # Inventory\n  3: An inventory is the process of checking fixed assets.\n  5: ## Starting an inventory\n  7: An administrator can start an inventory in the web admin UI.\n  11: Only users with the Inventory Manager role can start an inventory.\n  17: ## Closing an inventory\n  19: An inventory can be closed when every location is synchronized.\n\n[9 matches in 2 files]"
+ },
+ {
+  "tool": "grep",
+  "args": {
+   "ignore_case": false,
+   "pattern": "Inventory"
+  },
+  "output": "Docs/inventory_states.puml (1 match)\n  2: title Inventory state machine\n\nInventory.md (2 matches)\n  1: # Inventory\n  11: Only users with the Inventory Manager role can start an inventory.\n\n[3 matches in 2 files]"
+ },
+ {
+  "tool": "grep",
+  "args": {
+   "max_results": 2,
+   "pattern": "clos"
+  },
+  "output": "Docs/inventory_states.puml (2 matches)\n  4: Open --> Closed : close\n  5: Closed --> [*]\n\n[5 matches in 2 files; showing the first 2. Narrow with path_glob or a more specific pattern]"
+ },
+ {
+  "tool": "grep",
+  "args": {
+   "path_glob": "Processes/*",
+   "pattern": "a"
+  },
+  "output": "Processes/Café-walkthrough.md (4 matches)\n  1: ## Walkthrough\n  3: A walkthrough is a simplified process for small sites such as a café; it does not change the master state of assets.\n  5: ### Synchronization\n  7: The mobile app works offline; synchronization happens when the network is back.\n\n[4 matches in 1 file]"
+ },
+ {
+  "tool": "grep",
+  "args": {
+   "files_only": true,
+   "pattern": "a"
+  },
+  "output": "Docs/Api.md (5 matches)\nDocs/inventory_states.puml (2 matches)\nDocs/sync.mmd (2 matches)\nInventory.md (9 matches)\nProcesses/Café-walkthrough.md (4 matches)\nnotes.txt (1 match)\n\n[23 matches in 6 files]"
+ },
+ {
+  "tool": "grep",
+  "args": {
+   "pattern": "CAFÉ"
+  },
+  "output": "Processes/Café-walkthrough.md (1 match)\n  3: A walkthrough is a simplified process for small sites such as a café; it does not change the master state of assets.\n\n[1 match in 1 file]"
+ },
+ {
+  "tool": "grep",
+  "args": {
+   "pattern": "^#+\\s+\\w+ing",
+   "regex": true
+  },
+  "output": "Inventory.md (3 matches)\n  5: ## Starting an inventory\n  13: ### Selecting locations\n  17: ## Closing an inventory\n\n[3 matches in 1 file]"
+ },
+ {
+  "tool": "grep",
+  "args": {
+   "pattern": "\\w+tion\\b",
+   "regex": true
+  },
+  "output": "Docs/Api.md (1 match)\n  3: ## Authentication\n\nInventory.md (1 match)\n  19: An inventory can be closed when every location is synchronized.\n\nProcesses/Café-walkthrough.md (2 matches)\n  5: ### Synchronization\n  7: The mobile app works offline; synchronization happens when the network is back.\n\n[4 matches in 3 files]"
+ },
+ {
+  "tool": "grep",
+  "args": {
+   "pattern": "(",
+   "regex": true
+  },
+  "output": "Invalid regex: error parsing regexp: missing closing ): `(?i)(`"
+ },
+ {
+  "tool": "grep",
+  "args": {
+   "pattern": "zzzqqq"
+  },
+  "output": "No lines match 'zzzqqq'."
+ },
+ {
+  "tool": "grep",
+  "args": {
+   "pattern": "   "
+  },
+  "output": "Empty pattern."
+ }
+]

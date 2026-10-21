@@ -1,0 +1,6 @@
+@startuml inventory_states
+title Inventory state machine
+[*] --> Open
+Open --> Closed : close
+Closed --> [*]
+@enduml

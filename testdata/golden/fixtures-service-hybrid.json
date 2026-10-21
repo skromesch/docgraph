@@ -1,0 +1,56 @@
+[
+ {
+  "tool": "search",
+  "args": {
+   "query": "closing an inventory"
+  },
+  "output": "Confidence: high (keyword and semantic search agree on the top hit).\n\n[1] Inventory.md:17-20\nSection: Inventory > Closing an inventory\n\n## Closing an inventory\n\nAn inventory can be closed when every location is synchronized.\nAfter closing, missing assets get the \"Missing\" status.\n\n---\n\n[2] Inventory.md:9-11\nSection: Inventory > Starting an inventory > Permissions\n\n### Permissions\n\nOnly users with the Inventory Manager role can start an inventory.\n\n---\n\n[3] Inventory.md:5-7\nSection: Inventory > Starting an inventory\n\n## Starting an inventory\n\nAn administrator can start an inventory in the web admin UI.\n\n---\n\n[4] Docs/inventory_states.puml:1-6\nSection: inventory_states > Inventory state machine\n\n@startuml inventory_states\ntitle Inventory state machine\n[*] --> Open\nOpen --> Closed : close\nClosed --> [*]\n@enduml\n\n---\n\n[5] Inventory.md:1-3\nSection: Inventory\n\n# Inventory\n\nAn inventory is the process of checking fixed assets.\n\n---\n\n[6] Inventory.md:13-15\nSection: Inventory > Starting an inventory > Selecting locations\n\n### Selecting locations\n\nOne or more locations must be selected from the hierarchy.\n\n---\n\n[7] Docs/Api.md:7-12\nSection: API > Error codes\n\n## Error codes\n\n| Code | Meaning |\n|------|---------|\n| 401  | Missing or expired token |\n| 404  | Asset not found |\n\n(Other sections in this file: Authentication (3-5))\n\n---\n\n[8] Processes/Café-walkthrough.md:5-7\nSection: Café walkthrough > Walkthrough > Synchronization\n\n### Synchronization\n\nThe mobile app works offline; synchronization happens when the network is back.\n\n(Other sections in this file: Walkthrough (1-3))"
+ },
+ {
+  "tool": "search",
+  "args": {
+   "query": "how does mobile synchronization work",
+   "top_k": 3
+  },
+  "output": "Confidence: medium.\n\n[1] Processes/Café-walkthrough.md:5-7\nSection: Café walkthrough > Walkthrough > Synchronization\n\n### Synchronization\n\nThe mobile app works offline; synchronization happens when the network is back.\n\n---\n\n[2] Docs/sync.mmd:1-5\nSection: Sync flow\n\n---\ntitle: Sync flow\n---\nsequenceDiagram\n  Mobile->>Server: push transactions\n\n---\n\n[3] Processes/Café-walkthrough.md:1-3\nSection: Café walkthrough > Walkthrough\n\n## Walkthrough\n\nA walkthrough is a simplified process for small sites such as a café; it does not change the master state of assets."
+ },
+ {
+  "tool": "search",
+  "args": {
+   "query": "inventory states",
+   "top_k": 2
+  },
+  "output": "Confidence: medium.\n\n[1] Docs/inventory_states.puml:1-6\nSection: inventory_states > Inventory state machine\n\n@startuml inventory_states\ntitle Inventory state machine\n[*] --> Open\nOpen --> Closed : close\nClosed --> [*]\n@enduml\n\n---\n\n[2] Inventory.md:1-3\nSection: Inventory\n\n# Inventory\n\nAn inventory is the process of checking fixed assets.\n\n(Other sections in this file: Starting an inventory (5-7); Permissions (9-11); Selecting locations (13-15); Closing an inventory (17-20))"
+ },
+ {
+  "tool": "search",
+  "args": {
+   "query": "quantum physics particle accelerator"
+  },
+  "output": "Confidence: low. The hits may be off-topic: rephrase, try the other language, or grep for a word stem before concluding it is undocumented.\n\n[1] Docs/Api.md:7-12\nSection: API > Error codes\n\n## Error codes\n\n| Code | Meaning |\n|------|---------|\n| 401  | Missing or expired token |\n| 404  | Asset not found |\n\n(Other sections in this file: Authentication (3-5))\n\n---\n\n[2] Docs/inventory_states.puml:1-6\nSection: inventory_states > Inventory state machine\n\n@startuml inventory_states\ntitle Inventory state machine\n[*] --> Open\nOpen --> Closed : close\nClosed --> [*]\n@enduml\n\n---\n\n[3] Processes/Café-walkthrough.md:5-7\nSection: Café walkthrough > Walkthrough > Synchronization\n\n### Synchronization\n\nThe mobile app works offline; synchronization happens when the network is back.\n\n---\n\n[4] Docs/sync.mmd:1-5\nSection: Sync flow\n\n---\ntitle: Sync flow\n---\nsequenceDiagram\n  Mobile->>Server: push transactions\n\n---\n\n[5] notes.txt:1-1\nSection: notes\n\nRelease checklist: bump version, tag the repo, deploy to staging.\n\n---\n\n[6] Inventory.md:13-15\nSection: Inventory > Starting an inventory > Selecting locations\n\n### Selecting locations\n\nOne or more locations must be selected from the hierarchy.\n\n(Other sections in this file: Inventory (1-3); Starting an inventory (5-7); Permissions (9-11))\n\n---\n\n[7] Processes/Café-walkthrough.md:1-3\nSection: Café walkthrough > Walkthrough\n\n## Walkthrough\n\nA walkthrough is a simplified process for small sites such as a café; it does not change the master state of assets.\n\n---\n\n[8] Inventory.md:17-20\nSection: Inventory > Closing an inventory\n\n## Closing an inventory\n\nAn inventory can be closed when every location is synchronized.\nAfter closing, missing assets get the \"Missing\" status."
+ },
+ {
+  "tool": "search",
+  "args": {
+   "query": "inventory close",
+   "top_k": 1
+  },
+  "output": "Confidence: high (keyword and semantic search agree on the top hit).\n\n[1] Docs/inventory_states.puml:1-6\nSection: inventory_states > Inventory state machine\n\n@startuml inventory_states\ntitle Inventory state machine\n[*] --> Open\nOpen --> Closed : close\nClosed --> [*]\n@enduml"
+ },
+ {
+  "tool": "search",
+  "args": {
+   "query": "mobile synchronization push",
+   "top_k": 1
+  },
+  "output": "Confidence: medium.\n\n[1] Processes/Café-walkthrough.md:5-7\nSection: Café walkthrough > Walkthrough > Synchronization\n\n### Synchronization\n\nThe mobile app works offline; synchronization happens when the network is back.\n\n(Other sections in this file: Walkthrough (1-3))\n\n---\n\nRelated diagrams (PlantUML/Mermaid source, read with read_document):\n[D1] Docs/sync.mmd:1-5 | Sync flow"
+ },
+ {
+  "tool": "search",
+  "args": {
+   "query": "closed inventory state",
+   "top_k": 1
+  },
+  "output": "Confidence: high (keyword and semantic search agree on the top hit).\n\n[1] Docs/inventory_states.puml:1-6\nSection: inventory_states > Inventory state machine\n\n@startuml inventory_states\ntitle Inventory state machine\n[*] --> Open\nOpen --> Closed : close\nClosed --> [*]\n@enduml"
+ }
+]

@@ -1,0 +1,215 @@
+{
+ "titles": {
+  "Processes/Résumé.md": "Résumé",
+  "a/moveAsset-%2D-Move-the-café-asset.md": "moveAsset - Move the café asset",
+  "x/%E2%9C%93-done.md": "✓ done",
+  "x/bad%ZZ%e2-.md": "bad%ZZ�",
+  ".hidden": ".hidden",
+  "noext": "noext",
+  "a.b.c.puml": "a.b.c",
+  "  -  .md": "  -  "
+ },
+ "md": {
+  "frontmatter.md": {
+   "text": "---\ntitle: x\n# not heading\n---\nIntro\n\nSetext H1\n=========\nbody\n\n```\n# in fence\n```\n## Sub ##\n\n- list\n---\ntext\n[[_TOC_]]\n",
+   "title": "Setext H1",
+   "sections": [
+    [
+     "Setext H1",
+     0,
+     [
+      "Setext H1"
+     ],
+     1,
+     5,
+     true,
+     [
+      "---",
+      "title: x",
+      "# not heading",
+      "---",
+      "Intro"
+     ]
+    ],
+    [
+     "Setext H1",
+     1,
+     [
+      "Setext H1"
+     ],
+     7,
+     13,
+     true,
+     [
+      "Setext H1",
+      "=========",
+      "body",
+      "",
+      "```",
+      "# in fence",
+      "```"
+     ]
+    ],
+    [
+     "Sub",
+     2,
+     [
+      "Setext H1",
+      "Sub"
+     ],
+     14,
+     19,
+     true,
+     [
+      "## Sub ##",
+      "",
+      "- list",
+      "---",
+      "text",
+      ""
+     ]
+    ]
+   ]
+  },
+  "noh1.md": {
+   "text": "## Noh1\ntext\n### Deeper\nmore\n## [Link](http://x) *em*\nz\n",
+   "title": "noh1",
+   "sections": [
+    [
+     "Noh1",
+     2,
+     [
+      "Noh1"
+     ],
+     1,
+     2,
+     true,
+     [
+      "## Noh1",
+      "text"
+     ]
+    ],
+    [
+     "Deeper",
+     3,
+     [
+      "Noh1",
+      "Deeper"
+     ],
+     3,
+     4,
+     true,
+     [
+      "### Deeper",
+      "more"
+     ]
+    ],
+    [
+     "Link em",
+     2,
+     [
+      "noh1",
+      "Link em"
+     ],
+     5,
+     6,
+     true,
+     [
+      "## [Link](http://x) *em*",
+      "z"
+     ]
+    ]
+   ]
+  },
+  "empty.md": {
+   "text": "   \n\n",
+   "title": "empty",
+   "sections": []
+  },
+  "crlf.md": {
+   "text": "# T\r\na\rb\r\n\r\n## S\r\nc\u001f \n",
+   "title": "T",
+   "sections": [
+    [
+     "T",
+     1,
+     [
+      "T"
+     ],
+     1,
+     3,
+     true,
+     [
+      "# T",
+      "a",
+      "b"
+     ]
+    ],
+    [
+     "S",
+     2,
+     [
+      "T",
+      "S"
+     ],
+     5,
+     6,
+     true,
+     [
+      "## S",
+      "c\u001f "
+     ]
+    ]
+   ]
+  },
+  "dup.md": {
+   "text": "# A\n## B\nx\n## B\ny\n",
+   "title": "A",
+   "sections": [
+    [
+     "A",
+     1,
+     [
+      "A"
+     ],
+     1,
+     1,
+     false,
+     [
+      "# A"
+     ]
+    ],
+    [
+     "B",
+     2,
+     [
+      "A",
+      "B"
+     ],
+     2,
+     3,
+     true,
+     [
+      "## B",
+      "x"
+     ]
+    ],
+    [
+     "B",
+     2,
+     [
+      "A",
+      "B"
+     ],
+     4,
+     5,
+     true,
+     [
+      "## B",
+      "y"
+     ]
+    ]
+   ]
+  }
+ }
+}

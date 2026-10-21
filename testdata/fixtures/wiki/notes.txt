@@ -1,0 +1,1 @@
+Release checklist: bump version, tag the repo, deploy to staging.

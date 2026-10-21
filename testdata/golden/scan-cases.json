@@ -1,0 +1,111 @@
+[
+ {
+  "name": "none",
+  "config": [],
+  "file": null,
+  "files": [
+   "Docs/Api.md",
+   "Docs/inventory_states.puml",
+   "Docs/sync.mmd",
+   "Inventory.md",
+   "Processes/Café-walkthrough.md",
+   "notes.txt"
+  ]
+ },
+ {
+  "name": "dir",
+  "config": [],
+  "file": "Docs/\n",
+  "files": [
+   "Inventory.md",
+   "Processes/Café-walkthrough.md",
+   "notes.txt"
+  ]
+ },
+ {
+  "name": "ext",
+  "config": [],
+  "file": "*.txt\n*.mmd\n",
+  "files": [
+   "Docs/Api.md",
+   "Docs/inventory_states.puml",
+   "Inventory.md",
+   "Processes/Café-walkthrough.md"
+  ]
+ },
+ {
+  "name": "anchored",
+  "config": [],
+  "file": "/Inventory.md\n**/Café-walkthrough.md\n",
+  "files": [
+   "Docs/Api.md",
+   "Docs/inventory_states.puml",
+   "Docs/sync.mmd",
+   "notes.txt"
+  ]
+ },
+ {
+  "name": "negate-file",
+  "config": [
+   "*.txt"
+  ],
+  "file": "!notes.txt\n",
+  "files": [
+   "Docs/Api.md",
+   "Docs/inventory_states.puml",
+   "Docs/sync.mmd",
+   "Inventory.md",
+   "Processes/Café-walkthrough.md",
+   "notes.txt"
+  ]
+ },
+ {
+  "name": "negate-in-dir",
+  "config": [],
+  "file": "Processes/\n!Processes/Café-walkthrough.md\n",
+  "files": [
+   "Docs/Api.md",
+   "Docs/inventory_states.puml",
+   "Docs/sync.mmd",
+   "Inventory.md",
+   "notes.txt"
+  ]
+ },
+ {
+  "name": "glob-mid",
+  "config": [],
+  "file": "Do*/*.puml\n# comment\n\n",
+  "files": [
+   "Docs/Api.md",
+   "Docs/sync.mmd",
+   "Inventory.md",
+   "Processes/Café-walkthrough.md",
+   "notes.txt"
+  ]
+ },
+ {
+  "name": "nfd-pattern",
+  "config": [],
+  "file": "Processes/Café-walkthrough.md\n",
+  "files": [
+   "Docs/Api.md",
+   "Docs/inventory_states.puml",
+   "Docs/sync.mmd",
+   "Inventory.md",
+   "notes.txt"
+  ]
+ },
+ {
+  "name": "doublestar",
+  "config": [],
+  "file": "**/*.puml\n!**/inventory_*.puml\n",
+  "files": [
+   "Docs/Api.md",
+   "Docs/inventory_states.puml",
+   "Docs/sync.mmd",
+   "Inventory.md",
+   "Processes/Café-walkthrough.md",
+   "notes.txt"
+  ]
+ }
+]

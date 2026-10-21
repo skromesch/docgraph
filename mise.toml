@@ -1,0 +1,47 @@
+# Development toolchain and tasks: mise run build | test | golden | tokenizers | dist
+[tools]
+go = "1.27.2"
+# Rust (cargo) is needed only to compile lib/libtokenizers.a; any install works (e.g. brew).
+
+[env]
+# cgo: FTS5 compiled into SQLite, the tokenizers static lib, and silenced macOS
+# SDK deprecation warnings from sqlite-vec's cgo prolog (the bundled SQLite is used).
+GOFLAGS = "-tags=sqlite_fts5"
+CGO_LDFLAGS = "-L{{config_root}}/lib"
+CGO_CFLAGS = "-Wno-deprecated-declarations"
+
+[tasks.lib]
+description = "Compile lib/libtokenizers.a once (HF tokenizers FFI for github.com/daulet/tokenizers)"
+hide = true
+run = "[ -f lib/libtokenizers.a ] || mise run tokenizers"
+
+[tasks.tokenizers]
+description = "(Re)compile lib/libtokenizers.a with cargo"
+run = """
+set -e
+tmp="${TMPDIR:-/tmp}/docgraph-tokenizers"
+rm -rf "$tmp" && cp -R "$(go list -m -f '{% raw %}{{.Dir}}{% endraw %}' github.com/daulet/tokenizers)" "$tmp"
+chmod -R u+w "$tmp" && (cd "$tmp" && cargo build --release)
+mkdir -p lib && cp "$tmp/target/release/libtokenizers_ffi.a" lib/libtokenizers.a
+"""
+
+[tasks.build]
+description = "Build bin/docgraph"
+depends = ["lib"]
+run = "go build -o bin/docgraph ./cmd/docgraph"
+
+[tasks.test]
+description = "Run all tests (model-dependent ones skip until `docgraph model pull`)"
+depends = ["lib"]
+run = "go test ./..."
+
+[tasks.golden]
+description = "Rewrite testdata/golden from the current output (after an intended change; review the diff)"
+depends = ["lib"]
+run = "go test ./internal/chunk ./internal/embed ./internal/index ./internal/search ./internal/service -update"
+
+[tasks.dist]
+description = "Release archives into dist/: mise run dist [version]"
+depends = ["lib"]
+usage = 'arg "[version]" default="dev" help="Release version, e.g. v0.1.0"'
+run = 'scripts/release.sh "${usage_version}"'

@@ -1,0 +1,1036 @@
+{
+ "API endpoint token": {
+  "default": {
+   "match": "\"api\" OR \"endpoint\" OR \"token\"",
+   "hits": [
+    {
+     "rowid": 1,
+     "score": 3.905891
+    },
+    {
+     "rowid": 2,
+     "score": 3.719398
+    }
+   ]
+  },
+  "min3": {
+   "match": "\"api\" OR \"endpoint\" OR \"token\"",
+   "hits": [
+    {
+     "rowid": 1,
+     "score": 3.905891
+    },
+    {
+     "rowid": 2,
+     "score": 3.719398
+    }
+   ]
+  },
+  "prefix5": {
+   "match": "\"api\" OR \"endpo\"* OR \"token\"",
+   "hits": [
+    {
+     "rowid": 1,
+     "score": 6.113643
+    },
+    {
+     "rowid": 2,
+     "score": 3.719398
+    }
+   ]
+  },
+  "weights": {
+   "match": "\"api\" OR \"endpoint\" OR \"token\"",
+   "hits": [
+    {
+     "rowid": 1,
+     "score": 3.639608
+    },
+    {
+     "rowid": 2,
+     "score": 3.439484
+    }
+   ]
+  }
+ },
+ "C# .NET \"quoted\" (parens)": {
+  "default": {
+   "match": "\"c\" OR \"net\" OR \"quoted\" OR \"parens\"",
+   "hits": []
+  },
+  "min3": {
+   "match": "\"net\" OR \"quoted\" OR \"parens\"",
+   "hits": []
+  },
+  "prefix5": {
+   "match": "\"c\" OR \"net\" OR \"quote\"* OR \"paren\"*",
+   "hits": []
+  },
+  "weights": {
+   "match": "\"c\" OR \"net\" OR \"quoted\" OR \"parens\"",
+   "hits": []
+  }
+ },
+ "Missing status": {
+  "default": {
+   "match": "\"missing\" OR \"status\"",
+   "hits": [
+    {
+     "rowid": 9,
+     "score": 3.407491
+    },
+    {
+     "rowid": 2,
+     "score": 1.451129
+    }
+   ]
+  },
+  "min3": {
+   "match": "\"missing\" OR \"status\"",
+   "hits": [
+    {
+     "rowid": 9,
+     "score": 3.407491
+    },
+    {
+     "rowid": 2,
+     "score": 1.451129
+    }
+   ]
+  },
+  "prefix5": {
+   "match": "\"missi\"* OR \"statu\"*",
+   "hits": [
+    {
+     "rowid": 9,
+     "score": 3.407491
+    },
+    {
+     "rowid": 2,
+     "score": 1.451129
+    }
+   ]
+  },
+  "weights": {
+   "match": "\"missing\" OR \"status\"",
+   "hits": [
+    {
+     "rowid": 9,
+     "score": 4.67764
+    },
+    {
+     "rowid": 2,
+     "score": 1.988355
+    }
+   ]
+  }
+ },
+ "Starting an inventory permissions": {
+  "default": {
+   "match": "\"starting\" OR \"an\" OR \"inventory\" OR \"permissions\"",
+   "hits": [
+    {
+     "rowid": 7,
+     "score": 6.069002
+    },
+    {
+     "rowid": 6,
+     "score": 2.524636
+    },
+    {
+     "rowid": 8,
+     "score": 2.021384
+    },
+    {
+     "rowid": 9,
+     "score": 0.585091
+    },
+    {
+     "rowid": 5,
+     "score": 0.36222
+    },
+    {
+     "rowid": 3,
+     "score": 0.000002
+    }
+   ]
+  },
+  "min3": {
+   "match": "\"starting\" OR \"inventory\" OR \"permissions\"",
+   "hits": [
+    {
+     "rowid": 7,
+     "score": 5.541658
+    },
+    {
+     "rowid": 6,
+     "score": 1.915483
+    },
+    {
+     "rowid": 8,
+     "score": 1.542321
+    },
+    {
+     "rowid": 5,
+     "score": 0.000002
+    },
+    {
+     "rowid": 3,
+     "score": 0.000002
+    },
+    {
+     "rowid": 9,
+     "score": 0.000002
+    }
+   ]
+  },
+  "prefix5": {
+   "match": "\"start\"* OR \"an\" OR \"inven\"* OR \"permi\"*",
+   "hits": [
+    {
+     "rowid": 7,
+     "score": 5.572092
+    },
+    {
+     "rowid": 6,
+     "score": 1.844998
+    },
+    {
+     "rowid": 8,
+     "score": 1.461408
+    },
+    {
+     "rowid": 3,
+     "score": 0.602674
+    },
+    {
+     "rowid": 9,
+     "score": 0.585091
+    },
+    {
+     "rowid": 5,
+     "score": 0.36222
+    }
+   ]
+  },
+  "weights": {
+   "match": "\"starting\" OR \"an\" OR \"inventory\" OR \"permissions\"",
+   "hits": [
+    {
+     "rowid": 7,
+     "score": 4.963151
+    },
+    {
+     "rowid": 6,
+     "score": 2.236799
+    },
+    {
+     "rowid": 8,
+     "score": 1.26667
+    },
+    {
+     "rowid": 9,
+     "score": 0.534322
+    },
+    {
+     "rowid": 5,
+     "score": 0.473228
+    },
+    {
+     "rowid": 3,
+     "score": 0.000002
+    }
+   ]
+  }
+ },
+ "a": {
+  "default": {
+   "match": "\"a\"",
+   "hits": [
+    {
+     "rowid": 10,
+     "score": 2.053003
+    },
+    {
+     "rowid": 1,
+     "score": 1.555471
+    }
+   ]
+  },
+  "min3": {
+   "match": "",
+   "hits": []
+  },
+  "prefix5": {
+   "match": "\"a\"",
+   "hits": [
+    {
+     "rowid": 10,
+     "score": 2.053003
+    },
+    {
+     "rowid": 1,
+     "score": 1.555471
+    }
+   ]
+  },
+  "weights": {
+   "match": "\"a\"",
+   "hits": [
+    {
+     "rowid": 10,
+     "score": 2.488091
+    },
+    {
+     "rowid": 1,
+     "score": 2.084137
+    }
+   ]
+  }
+ },
+ "café": {
+  "default": {
+   "match": "\"café\"",
+   "hits": [
+    {
+     "rowid": 11,
+     "score": 2.26827
+    },
+    {
+     "rowid": 10,
+     "score": 2.249704
+    }
+   ]
+  },
+  "min3": {
+   "match": "\"café\"",
+   "hits": [
+    {
+     "rowid": 11,
+     "score": 2.26827
+    },
+    {
+     "rowid": 10,
+     "score": 2.249704
+    }
+   ]
+  },
+  "prefix5": {
+   "match": "\"café\"",
+   "hits": [
+    {
+     "rowid": 11,
+     "score": 2.26827
+    },
+    {
+     "rowid": 10,
+     "score": 2.249704
+    }
+   ]
+  },
+  "weights": {
+   "match": "\"café\"",
+   "hits": [
+    {
+     "rowid": 10,
+     "score": 2.053003
+    },
+    {
+     "rowid": 11,
+     "score": 1.451129
+    }
+   ]
+  }
+ },
+ "closing an inventory": {
+  "default": {
+   "match": "\"closing\" OR \"an\" OR \"inventory\"",
+   "hits": [
+    {
+     "rowid": 9,
+     "score": 4.427552
+    },
+    {
+     "rowid": 6,
+     "score": 0.609155
+    },
+    {
+     "rowid": 7,
+     "score": 0.527346
+    },
+    {
+     "rowid": 8,
+     "score": 0.479065
+    },
+    {
+     "rowid": 5,
+     "score": 0.36222
+    },
+    {
+     "rowid": 3,
+     "score": 0.000002
+    }
+   ]
+  },
+  "min3": {
+   "match": "\"closing\" OR \"inventory\"",
+   "hits": [
+    {
+     "rowid": 9,
+     "score": 3.842463
+    },
+    {
+     "rowid": 5,
+     "score": 0.000002
+    },
+    {
+     "rowid": 3,
+     "score": 0.000002
+    },
+    {
+     "rowid": 6,
+     "score": 0.000002
+    },
+    {
+     "rowid": 7,
+     "score": 0.000002
+    },
+    {
+     "rowid": 8,
+     "score": 0.000002
+    }
+   ]
+  },
+  "prefix5": {
+   "match": "\"closi\"* OR \"an\" OR \"inven\"*",
+   "hits": [
+    {
+     "rowid": 9,
+     "score": 4.427552
+    },
+    {
+     "rowid": 6,
+     "score": 0.609155
+    },
+    {
+     "rowid": 7,
+     "score": 0.527346
+    },
+    {
+     "rowid": 8,
+     "score": 0.479065
+    },
+    {
+     "rowid": 5,
+     "score": 0.36222
+    },
+    {
+     "rowid": 3,
+     "score": 0.000002
+    }
+   ]
+  },
+  "weights": {
+   "match": "\"closing\" OR \"an\" OR \"inventory\"",
+   "hits": [
+    {
+     "rowid": 9,
+     "score": 4.043363
+    },
+    {
+     "rowid": 6,
+     "score": 0.5856
+    },
+    {
+     "rowid": 7,
+     "score": 0.490227
+    },
+    {
+     "rowid": 5,
+     "score": 0.473228
+    },
+    {
+     "rowid": 8,
+     "score": 0.300199
+    },
+    {
+     "rowid": 3,
+     "score": 0.000002
+    }
+   ]
+  }
+ },
+ "inventor": {
+  "default": {
+   "match": "\"inventor\"",
+   "hits": []
+  },
+  "min3": {
+   "match": "\"inventor\"",
+   "hits": []
+  },
+  "prefix5": {
+   "match": "\"inven\"*",
+   "hits": [
+    {
+     "rowid": 5,
+     "score": 0.000002
+    },
+    {
+     "rowid": 3,
+     "score": 0.000002
+    },
+    {
+     "rowid": 6,
+     "score": 0.000002
+    },
+    {
+     "rowid": 9,
+     "score": 0.000002
+    },
+    {
+     "rowid": 7,
+     "score": 0.000002
+    },
+    {
+     "rowid": 8,
+     "score": 0.000002
+    }
+   ]
+  },
+  "weights": {
+   "match": "\"inventor\"",
+   "hits": []
+  }
+ },
+ "inventory states": {
+  "default": {
+   "match": "\"inventory\" OR \"states\"",
+   "hits": [
+    {
+     "rowid": 3,
+     "score": 3.368254
+    },
+    {
+     "rowid": 5,
+     "score": 0.000002
+    },
+    {
+     "rowid": 6,
+     "score": 0.000002
+    },
+    {
+     "rowid": 9,
+     "score": 0.000002
+    },
+    {
+     "rowid": 7,
+     "score": 0.000002
+    },
+    {
+     "rowid": 8,
+     "score": 0.000002
+    }
+   ]
+  },
+  "min3": {
+   "match": "\"inventory\" OR \"states\"",
+   "hits": [
+    {
+     "rowid": 3,
+     "score": 3.368254
+    },
+    {
+     "rowid": 5,
+     "score": 0.000002
+    },
+    {
+     "rowid": 6,
+     "score": 0.000002
+    },
+    {
+     "rowid": 9,
+     "score": 0.000002
+    },
+    {
+     "rowid": 7,
+     "score": 0.000002
+    },
+    {
+     "rowid": 8,
+     "score": 0.000002
+    }
+   ]
+  },
+  "prefix5": {
+   "match": "\"inven\"* OR \"state\"*",
+   "hits": [
+    {
+     "rowid": 3,
+     "score": 2.865838
+    },
+    {
+     "rowid": 10,
+     "score": 1.208024
+    },
+    {
+     "rowid": 5,
+     "score": 0.000002
+    },
+    {
+     "rowid": 6,
+     "score": 0.000002
+    },
+    {
+     "rowid": 9,
+     "score": 0.000002
+    },
+    {
+     "rowid": 7,
+     "score": 0.000002
+    },
+    {
+     "rowid": 8,
+     "score": 0.000002
+    }
+   ]
+  },
+  "weights": {
+   "match": "\"inventory\" OR \"states\"",
+   "hits": [
+    {
+     "rowid": 3,
+     "score": 3.110737
+    },
+    {
+     "rowid": 5,
+     "score": 0.000002
+    },
+    {
+     "rowid": 6,
+     "score": 0.000002
+    },
+    {
+     "rowid": 7,
+     "score": 0.000002
+    },
+    {
+     "rowid": 9,
+     "score": 0.000002
+    },
+    {
+     "rowid": 8,
+     "score": 0.000001
+    }
+   ]
+  }
+ },
+ "mobile synchronization offline": {
+  "default": {
+   "match": "\"mobile\" OR \"synchronization\" OR \"offline\"",
+   "hits": [
+    {
+     "rowid": 11,
+     "score": 7.52051
+    },
+    {
+     "rowid": 4,
+     "score": 1.675981
+    }
+   ]
+  },
+  "min3": {
+   "match": "\"mobile\" OR \"synchronization\" OR \"offline\"",
+   "hits": [
+    {
+     "rowid": 11,
+     "score": 7.52051
+    },
+    {
+     "rowid": 4,
+     "score": 1.675981
+    }
+   ]
+  },
+  "prefix5": {
+   "match": "\"mobil\"* OR \"synch\"* OR \"offli\"*",
+   "hits": [
+    {
+     "rowid": 11,
+     "score": 6.335835
+    },
+    {
+     "rowid": 4,
+     "score": 1.675981
+    },
+    {
+     "rowid": 9,
+     "score": 1.185948
+    }
+   ]
+  },
+  "weights": {
+   "match": "\"mobile\" OR \"synchronization\" OR \"offline\"",
+   "hits": [
+    {
+     "rowid": 11,
+     "score": 8.557462
+    },
+    {
+     "rowid": 4,
+     "score": 2.189614
+    }
+   ]
+  }
+ },
+ "push transactions": {
+  "default": {
+   "match": "\"push\" OR \"transactions\"",
+   "hits": [
+    {
+     "rowid": 4,
+     "score": 4.757595
+    }
+   ]
+  },
+  "min3": {
+   "match": "\"push\" OR \"transactions\"",
+   "hits": [
+    {
+     "rowid": 4,
+     "score": 4.757595
+    }
+   ]
+  },
+  "prefix5": {
+   "match": "\"push\" OR \"trans\"*",
+   "hits": [
+    {
+     "rowid": 4,
+     "score": 4.757595
+    }
+   ]
+  },
+  "weights": {
+   "match": "\"push\" OR \"transactions\"",
+   "hits": [
+    {
+     "rowid": 4,
+     "score": 6.21564
+    }
+   ]
+  }
+ },
+ "role": {
+  "default": {
+   "match": "\"role\"",
+   "hits": [
+    {
+     "rowid": 7,
+     "score": 2.059655
+    }
+   ]
+  },
+  "min3": {
+   "match": "\"role\"",
+   "hits": [
+    {
+     "rowid": 7,
+     "score": 2.059655
+    }
+   ]
+  },
+  "prefix5": {
+   "match": "\"role\"",
+   "hits": [
+    {
+     "rowid": 7,
+     "score": 2.059655
+    }
+   ]
+  },
+  "weights": {
+   "match": "\"role\"",
+   "hits": [
+    {
+     "rowid": 7,
+     "score": 2.822165
+    }
+   ]
+  }
+ },
+ "select locations from the hierarchy": {
+  "default": {
+   "match": "\"select\" OR \"locations\" OR \"from\" OR \"the\" OR \"hierarchy\"",
+   "hits": [
+    {
+     "rowid": 8,
+     "score": 7.918097
+    },
+    {
+     "rowid": 11,
+     "score": 0.000001
+    },
+    {
+     "rowid": 5,
+     "score": 0.000001
+    },
+    {
+     "rowid": 12,
+     "score": 0.000001
+    },
+    {
+     "rowid": 1,
+     "score": 0.000001
+    },
+    {
+     "rowid": 7,
+     "score": 0.000001
+    },
+    {
+     "rowid": 6,
+     "score": 0.000001
+    },
+    {
+     "rowid": 10,
+     "score": 0.000001
+    },
+    {
+     "rowid": 9,
+     "score": 0.000001
+    }
+   ]
+  },
+  "min3": {
+   "match": "\"select\" OR \"locations\" OR \"from\" OR \"the\" OR \"hierarchy\"",
+   "hits": [
+    {
+     "rowid": 8,
+     "score": 7.918097
+    },
+    {
+     "rowid": 11,
+     "score": 0.000001
+    },
+    {
+     "rowid": 5,
+     "score": 0.000001
+    },
+    {
+     "rowid": 12,
+     "score": 0.000001
+    },
+    {
+     "rowid": 1,
+     "score": 0.000001
+    },
+    {
+     "rowid": 7,
+     "score": 0.000001
+    },
+    {
+     "rowid": 6,
+     "score": 0.000001
+    },
+    {
+     "rowid": 10,
+     "score": 0.000001
+    },
+    {
+     "rowid": 9,
+     "score": 0.000001
+    }
+   ]
+  },
+  "prefix5": {
+   "match": "\"selec\"* OR \"locat\"* OR \"from\" OR \"the\" OR \"hiera\"*",
+   "hits": [
+    {
+     "rowid": 8,
+     "score": 10.718765
+    },
+    {
+     "rowid": 9,
+     "score": 1.185949
+    },
+    {
+     "rowid": 11,
+     "score": 0.000001
+    },
+    {
+     "rowid": 5,
+     "score": 0.000001
+    },
+    {
+     "rowid": 12,
+     "score": 0.000001
+    },
+    {
+     "rowid": 1,
+     "score": 0.000001
+    },
+    {
+     "rowid": 7,
+     "score": 0.000001
+    },
+    {
+     "rowid": 6,
+     "score": 0.000001
+    },
+    {
+     "rowid": 10,
+     "score": 0.000001
+    }
+   ]
+  },
+  "weights": {
+   "match": "\"select\" OR \"locations\" OR \"from\" OR \"the\" OR \"hierarchy\"",
+   "hits": [
+    {
+     "rowid": 8,
+     "score": 9.173355
+    },
+    {
+     "rowid": 11,
+     "score": 0.000002
+    },
+    {
+     "rowid": 5,
+     "score": 0.000002
+    },
+    {
+     "rowid": 12,
+     "score": 0.000002
+    },
+    {
+     "rowid": 1,
+     "score": 0.000001
+    },
+    {
+     "rowid": 7,
+     "score": 0.000001
+    },
+    {
+     "rowid": 6,
+     "score": 0.000001
+    },
+    {
+     "rowid": 10,
+     "score": 0.000001
+    },
+    {
+     "rowid": 9,
+     "score": 0.000001
+    }
+   ]
+  }
+ },
+ "walkthrough master state": {
+  "default": {
+   "match": "\"walkthrough\" OR \"master\" OR \"state\"",
+   "hits": [
+    {
+     "rowid": 10,
+     "score": 5.731221
+    },
+    {
+     "rowid": 3,
+     "score": 2.752927
+    },
+    {
+     "rowid": 11,
+     "score": 2.639907
+    }
+   ]
+  },
+  "min3": {
+   "match": "\"walkthrough\" OR \"master\" OR \"state\"",
+   "hits": [
+    {
+     "rowid": 10,
+     "score": 5.731221
+    },
+    {
+     "rowid": 3,
+     "score": 2.752927
+    },
+    {
+     "rowid": 11,
+     "score": 2.639907
+    }
+   ]
+  },
+  "prefix5": {
+   "match": "\"walkt\"* OR \"maste\"* OR \"state\"",
+   "hits": [
+    {
+     "rowid": 10,
+     "score": 5.731221
+    },
+    {
+     "rowid": 3,
+     "score": 2.752927
+    },
+    {
+     "rowid": 11,
+     "score": 2.639907
+    }
+   ]
+  },
+  "weights": {
+   "match": "\"walkthrough\" OR \"master\" OR \"state\"",
+   "hits": [
+    {
+     "rowid": 10,
+     "score": 6.793416
+    },
+    {
+     "rowid": 3,
+     "score": 2.373101
+    },
+    {
+     "rowid": 11,
+     "score": 1.988355
+    }
+   ]
+  }
+ },
+ "zzzqqq no such thing": {
+  "default": {
+   "match": "\"zzzqqq\" OR \"no\" OR \"such\" OR \"thing\"",
+   "hits": [
+    {
+     "rowid": 10,
+     "score": 1.714604
+    }
+   ]
+  },
+  "min3": {
+   "match": "\"zzzqqq\" OR \"such\" OR \"thing\"",
+   "hits": [
+    {
+     "rowid": 10,
+     "score": 1.714604
+    }
+   ]
+  },
+  "prefix5": {
+   "match": "\"zzzqq\"* OR \"no\" OR \"such\" OR \"thing\"",
+   "hits": [
+    {
+     "rowid": 10,
+     "score": 1.714604
+    }
+   ]
+  },
+  "weights": {
+   "match": "\"zzzqqq\" OR \"no\" OR \"such\" OR \"thing\"",
+   "hits": [
+    {
+     "rowid": 10,
+     "score": 2.480212
+    }
+   ]
+  }
+ }
+}

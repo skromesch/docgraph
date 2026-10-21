@@ -1,0 +1,129 @@
+-- SELECT id, path, title, type, content_hash, size_bytes FROM documents ORDER BY path
+18395f9e0112e99cDocs/Api.mdAPImarkdown71b85259654c80e99a38b7158268ffa4fc89049ef0f5c49570c03e3b70afdc07211
+634bfb642fa4d665Docs/inventory_states.pumlInventory state machineplantuml45bfa754eb69f3a4077981b02b315e46084dec97a62f884d5b7169dc6f2b9614117
+6df4f347c0907ab4Docs/sync.mmdSync flowmermaid56e264967439f6a80a4d062bd7ae01717b083e5c865e891efc19d4b75d7e587f78
+86a82f5fc5c9d0d6Inventory.mdInventorymarkdown2310d8bfeb702a236786006c90a7e55f65d520254c49dda78f4706f296b5c22a471
+9e13ee47d443934eProcesses/Café-walkthrough.mdCafé walkthroughmarkdown57c7642a71a41d31d4a8b155173e9c568a1a5676ebf9b1daaa9302c1605c6005236
+e39538e7f27a7bf5notes.txtnotestext6647a4b5b2ff070b44e0fc4b533ea9af4800bf5608bee3906080da71d4054bde66
+-- SELECT rowid, id, document_id, parent_chunk_id, heading, heading_path, heading_level, content, embedding_text, content_hash, embedding_key, start_line, end_line, chunk_index, part, token_count FROM chunks ORDER BY rowid
+163d0d513d1445c3c18395f9e0112e99c<nil>AuthenticationAPI > Authentication2## Authentication
+
+All endpoints require a bearer token issued by the AuthGW service.Document: API (Docs/Api.md)
+Section: API > Authentication
+
+## Authentication
+
+All endpoints require a bearer token issued by the AuthGW service.f89eb217e2da6297e9bb115e3f3ec70d7c33929bf836896dd08ff29bb813300b<nil> 3 5 0 0 22
+299145e3c84f87e9218395f9e0112e99c<nil>Error codesAPI > Error codes2## Error codes
+
+| Code | Meaning |
+|------|---------|
+| 401  | Missing or expired token |
+| 404  | Asset not found |Document: API (Docs/Api.md)
+Section: API > Error codes
+
+## Error codes
+
+| Code | Meaning |
+|------|---------|
+| 401  | Missing or expired token |
+| 404  | Asset not found |a7c75c2fcb7fa404710044209423baf65f655d65491ac1bb7a60950d3d2eb41a<nil> 7 12 1 0 29
+3d3f52602b7d31b76634bfb642fa4d665<nil>Inventory state machineinventory_states > Inventory state machine0@startuml inventory_states
+title Inventory state machine
+[*] --> Open
+Open --> Closed : close
+Closed --> [*]
+@endumlDocument: Inventory state machine (Docs/inventory_states.puml)
+Section: inventory_states > Inventory state machine
+
+@startuml inventory_states
+title Inventory state machine
+[*] --> Open
+Open --> Closed : close
+Closed --> [*]
+@enduml8f0349545b6e62bbf015b595247396f4db8a98767a4899212a4df7ab9a068fba<nil> 1 6 0 0 29
+45dfba9a6abc6eaa16df4f347c0907ab4<nil>Sync flowSync flow0---
+title: Sync flow
+---
+sequenceDiagram
+  Mobile->>Server: push transactionsDocument: Sync flow (Docs/sync.mmd)
+Section: Sync flow
+
+---
+title: Sync flow
+---
+sequenceDiagram
+  Mobile->>Server: push transactions4d5b8e6ecde1b4d59f1884af56935462c8f45064debf28b47807c56dd3b971a9<nil> 1 5 0 0 20
+5059f98df3cff1d3186a82f5fc5c9d0d6<nil>InventoryInventory1# Inventory
+
+An inventory is the process of checking fixed assets.Document: Inventory (Inventory.md)
+Section: Inventory
+
+# Inventory
+
+An inventory is the process of checking fixed assets.d4f9b77821a5fab5bcafe3c17cce8031a1834eaaa67b685b8081d149963e00b1<nil> 1 3 0 0 17
+6427ee5f13f07d59486a82f5fc5c9d0d6059f98df3cff1d31Starting an inventoryInventory > Starting an inventory2## Starting an inventory
+
+An administrator can start an inventory in the web admin UI.Document: Inventory (Inventory.md)
+Section: Inventory > Starting an inventory
+
+## Starting an inventory
+
+An administrator can start an inventory in the web admin UI.60c4f49004eff1380a08cedca9b0c83cf6fb9eb9088146a21dba3b0a76883197<nil> 5 7 1 0 22
+7ccc845b8d0d9d9d286a82f5fc5c9d0d6427ee5f13f07d594PermissionsInventory > Starting an inventory > Permissions3### Permissions
+
+Only users with the Inventory Manager role can start an inventory.Document: Inventory (Inventory.md)
+Section: Inventory > Starting an inventory > Permissions
+
+### Permissions
+
+Only users with the Inventory Manager role can start an inventory.c5d486985f4c8a241e203efcc765141eda85b3999255d70479c45658179f2d47<nil> 9 11 2 0 21
+848473de30685207d86a82f5fc5c9d0d6427ee5f13f07d594Selecting locationsInventory > Starting an inventory > Selecting locations3### Selecting locations
+
+One or more locations must be selected from the hierarchy.Document: Inventory (Inventory.md)
+Section: Inventory > Starting an inventory > Selecting locations
+
+### Selecting locations
+
+One or more locations must be selected from the hierarchy.544babc55f17d137f97784822c45b815281a0ebe6cd276bb0eb56a497305b86d<nil> 13 15 3 0 21
+9f6d2ef1ea8cc302286a82f5fc5c9d0d6059f98df3cff1d31Closing an inventoryInventory > Closing an inventory2## Closing an inventory
+
+An inventory can be closed when every location is synchronized.
+After closing, missing assets get the "Missing" status.Document: Inventory (Inventory.md)
+Section: Inventory > Closing an inventory
+
+## Closing an inventory
+
+An inventory can be closed when every location is synchronized.
+After closing, missing assets get the "Missing" status.24c8f9fd444f9e8df4e0a7224258507224f1dde63ce26e29d2f7d910678d1006<nil> 17 20 4 0 36
+10a44af2848a6be1659e13ee47d443934e<nil>WalkthroughCafé walkthrough > Walkthrough2## Walkthrough
+
+A walkthrough is a simplified process for small sites such as a café; it does not change the master state of assets.Document: Café walkthrough (Processes/Café-walkthrough.md)
+Section: Café walkthrough > Walkthrough
+
+## Walkthrough
+
+A walkthrough is a simplified process for small sites such as a café; it does not change the master state of assets.ad8e121728df39c232648295d56d4905e13cb7c6205812a27bab3f84582acc16<nil> 1 3 0 0 33
+11c77f5fbfa8d574f59e13ee47d443934ea44af2848a6be165SynchronizationCafé walkthrough > Walkthrough > Synchronization3### Synchronization
+
+The mobile app works offline; synchronization happens when the network is back.Document: Café walkthrough (Processes/Café-walkthrough.md)
+Section: Café walkthrough > Walkthrough > Synchronization
+
+### Synchronization
+
+The mobile app works offline; synchronization happens when the network is back.494fb76b8fb52b4374103954c9b56b13df38a54fdf56bde4ce177600e739239e<nil> 5 7 1 0 25
+1295a6b97e0d6ce257e39538e7f27a7bf5<nil>notesnotes0Release checklist: bump version, tag the repo, deploy to staging.Document: notes (notes.txt)
+Section: notes
+
+Release checklist: bump version, tag the repo, deploy to staging.35026888d3868c1ce469c1917cdb54c1c8c14a6b0bf9c773af4709c957eda2eb<nil> 1 1 0 0 17
+-- SELECT rowid FROM chunks_fts WHERE chunks_fts MATCH 'inventory OR assets OR synchronization' ORDER BY rank, rowid
+11
+5
+10
+9
+3
+6
+7
+8
+-- SELECT key, value FROM metadata WHERE key = 'schema_version'
+schema_version1
