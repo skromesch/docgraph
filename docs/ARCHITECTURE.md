@@ -22,7 +22,8 @@
 
 | Package | Role |
 |---|---|
-| `internal/parse` | `Parser` interface: Markdown, PlantUML, Mermaid, plain text → sections |
+| `internal/parse` | `Parser` interface: Markdown, PlantUML, Mermaid, plain text, Word (via Markdown) → sections |
+| `internal/convert` | `.docx` → Markdown with pandoc; hidden copies under `.docgraph/converted/`, read by the indexer and the tools |
 | `internal/chunk` | sections → size-bounded chunks; token counters (HF tokenizer, `chars/4` heuristic) |
 | `internal/embed` | `Embedder` interface; ONNX Runtime implementation (fp32 / fp16 / int8) |
 | `internal/store` | SQLite repository, embedded `schema.sql`, `VectorStore` (sqlite-vec) |

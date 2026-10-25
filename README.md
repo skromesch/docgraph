@@ -1,6 +1,6 @@
 # DocGraph
 
-Local search over a documentation folder (Markdown, PlantUML, Mermaid, text) for AI coding agents. DocGraph indexes the files into one SQLite database and serves hybrid search (BM25 + multilingual embeddings, fused with RRF) through an MCP server, so an agent such as Claude Code finds the right section instead of reading files one by one.
+Local search over a documentation folder (Markdown, PlantUML, Mermaid, text, Word) for AI coding agents. DocGraph indexes the files into one SQLite database and serves hybrid search (BM25 + multilingual embeddings, fused with RRF) through an MCP server, so an agent such as Claude Code finds the right section instead of reading files one by one.
 
 - **Hybrid search**, tuned for mixed Hungarian/English wikis (`multilingual-e5-base`), with a confidence label and a separate block for related diagrams.
 - **MCP tools**: `search`, `read_document`, `list_documents`, `grep`.
@@ -52,6 +52,7 @@ docgraph sync                      # later: one incremental run
 docgraph search "how is an inventory closed"
 docgraph search -m keyword "X-Company-Id"
 docgraph stats
+docgraph stats --unindexed         # files left out of the index, and why
 ```
 
 ## Use with Claude Code
@@ -104,8 +105,15 @@ The menu's ignore editor previews which files a rule would exclude before saving
 | `.puml`, `.plantuml` | PlantUML | one section per `@start…@end` block |
 | `.mmd`, `.mermaid` | Mermaid | whole file |
 | `.txt` | plain text | whole file, split by size |
+| `.docx` | Word, converted to Markdown by [pandoc](https://pandoc.org) | as Markdown (headings from Word heading styles) |
 
 File names follow the Azure DevOps wiki convention: `Bulk-asset%2Dassignment.md` gets the title `Bulk asset-assignment`. See [docs/CHUNKING.md](docs/CHUNKING.md).
+
+### Word documents
+
+`.docx` files need [pandoc](https://pandoc.org/installing.html) (`brew install pandoc`, `sudo apt install pandoc`). DocGraph runs `pandoc -f docx -t gfm` and indexes the result: text and tables (as Markdown tables) are searchable, images keep only their alt text. The converted Markdown is kept out of the docs folder, under `.docgraph/converted/`. The tools still name the `.docx` path; line numbers in `search`, `read_document` and `grep` refer to the converted text.
+
+Without pandoc, `.docx` files are skipped with a warning and picked up by the next sync once pandoc is available; an already indexed version stays searchable meanwhile. If pandoc is not on `PATH`, set `convert.pandoc_path` (the menu has an entry for it). `docgraph stats --unindexed` lists every file that is not indexed, with the reason (`extension`, `ignored: <pattern>`, `excluded dir`, `pandoc missing`, `not indexed (failed or pending sync)`).
 
 ## Configuration
 
@@ -117,7 +125,7 @@ index:
   max_tokens: 480           # sections above this are split (e5 input limit is 512)
   overlap_tokens: 60
   min_section_tokens: 0     # >0: merge tiny subsections into their parent
-  extensions: [.md, .markdown, .puml, .plantuml, .mmd, .mermaid, .txt]
+  extensions: [.md, .markdown, .puml, .plantuml, .mmd, .mermaid, .txt, .docx]
   ignore: [CLAUDE.md, AGENTS.md, .claude/, …]   # gitignore patterns (+ <root>/.docgraphignore)
   exclude_dirs: [.git, .docgraph, .venv, node_modules, __pycache__]
 embedding:
@@ -141,7 +149,11 @@ search:
     k: 60
     bm25_weight: 1
     vector_weight: 1
+convert:
+  pandoc_path: ""           # empty = pandoc from PATH
 ```
+
+A `config.yaml` written by an older version lists `extensions` explicitly, and a list replaces the default: add `.docx` there to index Word documents.
 
 Switching `embedding.model`, or to and from int8, requires `docgraph index --rebuild`; vectors from different models are never mixed. fp32 and fp16 vectors are interchangeable.
 

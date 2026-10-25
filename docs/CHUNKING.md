@@ -46,6 +46,7 @@ Parsers know nothing about token limits.
   - if markers are missing or unterminated, the whole file is one section.
 - **Mermaid**: the whole file is one section, titled from `title:` (front matter or directive) or the path.
 - **Text**: the whole file is one section.
+- **Word (`.docx`)**: pandoc converts the file to GitHub-flavored Markdown (`internal/convert`), which the Markdown parser splits as above; Word heading styles become `#` headings, tables become pipe tables (merged cells may come out as HTML tables). The document type is `docx`, and line numbers refer to the converted text in `.docgraph/converted/<path>.md`.
 
 ## Chunker
 
