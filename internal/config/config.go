@@ -60,10 +60,15 @@ type Search struct {
 	RRF              RRF    `yaml:"rrf"`
 }
 
+type Convert struct {
+	PandocPath string `yaml:"pandoc_path"` // empty = pandoc from PATH
+}
+
 type Config struct {
 	Index     Index     `yaml:"index"`
 	Embedding Embedding `yaml:"embedding"`
 	Search    Search    `yaml:"search"`
+	Convert   Convert   `yaml:"convert"`
 }
 
 // AgentIgnore lists AI coding-agent instruction files and folders: they
@@ -81,7 +86,7 @@ func Default() Config {
 	return Config{
 		Index: Index{
 			TargetTokens: 400, MaxTokens: 480, OverlapTokens: 60,
-			Extensions:  []string{".md", ".markdown", ".puml", ".plantuml", ".mmd", ".mermaid", ".txt"},
+			Extensions:  []string{".md", ".markdown", ".puml", ".plantuml", ".mmd", ".mermaid", ".txt", ".docx"},
 			Ignore:      append([]string{}, AgentIgnore...),
 			ExcludeDirs: []string{".git", ".docgraph", ".venv", "node_modules", "__pycache__"},
 		},

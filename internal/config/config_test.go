@@ -40,3 +40,20 @@ func TestFindRoot(t *testing.T) {
 		t.Errorf("got %s want %s", got, root)
 	}
 }
+
+func TestDocxDefaultsAndPandocPath(t *testing.T) {
+	found := false
+	for _, e := range Default().Index.Extensions {
+		found = found || e == ".docx"
+	}
+	if !found {
+		t.Error(".docx not in default extensions")
+	}
+	root := t.TempDir()
+	os.MkdirAll(filepath.Join(root, Dir), 0o755)
+	os.WriteFile(filepath.Join(root, Dir, ConfigFile), []byte("convert:\n  pandoc_path: /x\n"), 0o644)
+	cfg, err := Load(root)
+	if err != nil || cfg.Convert.PandocPath != "/x" {
+		t.Errorf("got %+v %v", cfg.Convert, err)
+	}
+}
