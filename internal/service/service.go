@@ -4,7 +4,9 @@
 package service
 
 import (
+	"errors"
 	"fmt"
+	"io"
 	"os"
 	"path"
 	"path/filepath"
@@ -16,6 +18,7 @@ import (
 
 	"github.com/skromesch/docgraph/internal/chunk"
 	"github.com/skromesch/docgraph/internal/config"
+	"github.com/skromesch/docgraph/internal/convert"
 	"github.com/skromesch/docgraph/internal/embed"
 	"github.com/skromesch/docgraph/internal/index"
 	"github.com/skromesch/docgraph/internal/model"
@@ -44,6 +47,7 @@ type Service struct {
 	DB         *store.DB
 	Cfg        config.Config
 	SourceRoot string
+	Warn       io.Writer // one-time notices (default os.Stderr)
 
 	mu       sync.Mutex // one SQLite connection + one model: serialize calls
 	bm25     *search.BM25
@@ -53,6 +57,7 @@ type Service struct {
 	ready    chan struct{}
 
 	autoSync   bool
+	warnedDocx bool
 	lastSync   time.Time
 	LastSync   *index.Summary
 	counter    chunk.Counter
@@ -140,6 +145,14 @@ func (s *Service) syncLocked() (*index.Summary, error) {
 		s.counter = chunk.GetCounter(s.Cfg.Embedding.Model)
 	}
 	sum, err := index.New(s.DB, s.Cfg, s.embedder, s.counter).Index(s.SourceRoot, nil, true)
+	if sum.Skipped > 0 && !s.warnedDocx { // once per process, not every SyncInterval
+		s.warnedDocx = true
+		w := s.Warn
+		if w == nil {
+			w = os.Stderr
+		}
+		fmt.Fprintln(w, convert.Warning(sum.Skipped))
+	}
 	s.lastSync, s.LastSync = time.Now(), &sum
 	return &sum, err
 }
@@ -288,11 +301,10 @@ func (s *Service) readDocument(p string, startLine, endLine int) string {
 	if _, ok := docs[p]; !ok {
 		return fmt.Sprintf("Not an indexed document: %s. Use list_documents or search to find paths.", p)
 	}
-	full := s.fileFor(p)
-	if full == "" {
+	if s.fileFor(p) == "" {
 		return "File not found on disk: " + p
 	}
-	raw, err := os.ReadFile(full)
+	raw, err := s.contentFor(p)
 	if err != nil {
 		return "Read failed: " + err.Error()
 	}
@@ -409,4 +421,29 @@ func (s *Service) fileFor(p string) string {
 		}
 	}
 	return ""
+}
+
+// contentFor returns the text tools read for a document: the file itself, or
+// for a Word document its hidden Markdown, regenerated when it is missing.
+func (s *Service) contentFor(p string) ([]byte, error) {
+	full := s.fileFor(p)
+	if full == "" {
+		return nil, fmt.Errorf("file not found on disk: %s", p)
+	}
+	if !convert.IsDocx(p) {
+		return os.ReadFile(full)
+	}
+	hidden := convert.Path(convert.Dir(s.DB.Path), p)
+	if raw, err := os.ReadFile(hidden); err == nil {
+		return raw, nil
+	}
+	pandoc, err := convert.FindPandoc(s.Cfg.Convert.PandocPath)
+	if err != nil {
+		return nil, errors.New(convert.Warning(1))
+	}
+	text, err := convert.Docx(pandoc, full)
+	if err != nil {
+		return nil, err
+	}
+	return []byte(text), convert.Write(hidden, text)
 }

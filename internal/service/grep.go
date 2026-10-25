@@ -2,7 +2,6 @@ package service
 
 import (
 	"fmt"
-	"os"
 	"regexp"
 	"sort"
 	"strings"
@@ -70,11 +69,7 @@ func (s *Service) grep(pattern string, regex bool, glob string, ignoreCase bool,
 	var groups []string
 	total, files := 0, 0
 	for _, p := range paths {
-		full := s.fileFor(p)
-		if full == "" {
-			continue
-		}
-		raw, err := os.ReadFile(full)
+		raw, err := s.contentFor(p)
 		if err != nil {
 			continue
 		}
