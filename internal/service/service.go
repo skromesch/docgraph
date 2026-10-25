@@ -4,7 +4,6 @@
 package service
 
 import (
-	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -58,10 +57,12 @@ type Service struct {
 
 	autoSync   bool
 	warnedDocx bool
-	lastSync   time.Time
-	LastSync   *index.Summary
-	counter    chunk.Counter
-	syncPeriod time.Duration
+	// .docx files pandoc failed on, kept across auto-syncs
+	docxFailures map[string]index.Failure
+	lastSync     time.Time
+	LastSync     *index.Summary
+	counter      chunk.Counter
+	syncPeriod   time.Duration
 }
 
 func New(db *store.DB, cfg config.Config, sourceRoot string) *Service {
@@ -144,7 +145,12 @@ func (s *Service) syncLocked() (*index.Summary, error) {
 	if s.counter == nil {
 		s.counter = chunk.GetCounter(s.Cfg.Embedding.Model)
 	}
-	sum, err := index.New(s.DB, s.Cfg, s.embedder, s.counter).Index(s.SourceRoot, nil, true)
+	if s.docxFailures == nil {
+		s.docxFailures = map[string]index.Failure{}
+	}
+	ix := index.New(s.DB, s.Cfg, s.embedder, s.counter)
+	ix.Failures = s.docxFailures
+	sum, err := ix.Index(s.SourceRoot, nil, true)
 	if sum.Skipped > 0 && !s.warnedDocx { // once per process, not every SyncInterval
 		s.warnedDocx = true
 		w := s.Warn
@@ -439,7 +445,8 @@ func (s *Service) contentFor(p string) ([]byte, error) {
 	}
 	pandoc, err := convert.FindPandoc(s.Cfg.Convert.PandocPath)
 	if err != nil {
-		return nil, errors.New(convert.Warning(1))
+		return nil, fmt.Errorf("the converted text of %s is missing and pandoc was not found; install it (%s) or set convert.pandoc_path in .docgraph/config.yaml",
+			p, convert.InstallHint())
 	}
 	text, err := convert.Docx(pandoc, full)
 	if err != nil {

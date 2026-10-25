@@ -113,7 +113,7 @@ File names follow the Azure DevOps wiki convention: `Bulk-asset%2Dassignment.md`
 
 `.docx` files need [pandoc](https://pandoc.org/installing.html) (`brew install pandoc`, `sudo apt install pandoc`). DocGraph runs `pandoc -f docx -t gfm` and indexes the result: text and tables (as Markdown tables) are searchable, images keep only their alt text. The converted Markdown is kept out of the docs folder, under `.docgraph/converted/`. The tools still name the `.docx` path; line numbers in `search`, `read_document` and `grep` refer to the converted text.
 
-Without pandoc, `.docx` files are skipped with a warning and picked up by the next sync once pandoc is available; an already indexed version stays searchable meanwhile. If pandoc is not on `PATH`, set `convert.pandoc_path` (the menu has an entry for it). `docgraph stats --unindexed` lists every file that is not indexed, with the reason (`extension`, `ignored: <pattern>`, `excluded dir`, `pandoc missing`, `not indexed (failed or pending sync)`).
+Without pandoc, `.docx` files are skipped with a warning and picked up by the next sync once pandoc is available; an already indexed version stays searchable meanwhile. Word lock files (`~$*`) are ignored by default, and the MCP server retries a `.docx` that pandoc failed on only after the file changes. If pandoc is not on `PATH`, set `convert.pandoc_path` (the menu has an entry for it). `docgraph stats --unindexed` lists every file that is not indexed, with the reason (`extension`, `ignored: <pattern>`, `excluded dir`, `pandoc missing`, `not indexed (failed or pending sync)`).
 
 ## Configuration
 

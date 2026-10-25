@@ -82,12 +82,16 @@ var AgentIgnore = []string{
 	".github/copilot-instructions.md", ".github/instructions/", ".github/prompts/", ".github/chatmodes/",
 }
 
+// WordLockFile matches the owner files Word keeps next to an open document
+// (~$Name.docx): small, not a document, and pandoc fails on them.
+const WordLockFile = "~$*"
+
 func Default() Config {
 	return Config{
 		Index: Index{
 			TargetTokens: 400, MaxTokens: 480, OverlapTokens: 60,
 			Extensions:  []string{".md", ".markdown", ".puml", ".plantuml", ".mmd", ".mermaid", ".txt", ".docx"},
-			Ignore:      append([]string{}, AgentIgnore...),
+			Ignore:      append(append([]string{}, AgentIgnore...), WordLockFile),
 			ExcludeDirs: []string{".git", ".docgraph", ".venv", "node_modules", "__pycache__"},
 		},
 		Embedding: Embedding{Model: "intfloat/multilingual-e5-base", Backend: "onnx-fp16", BatchSize: 32},

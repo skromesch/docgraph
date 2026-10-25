@@ -4,6 +4,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"strings"
 	"testing"
 	"time"
 
@@ -108,5 +109,31 @@ func TestIndexDocxCorrupt(t *testing.T) {
 	s, _ := ix.Index(root, nil, false)
 	if s.Failed != 1 || s.New != 2 || len(s.Errors) != 1 || s.Errors[0][:9] != "bad.docx:" {
 		t.Fatalf("%+v", s)
+	}
+}
+
+func TestWordLockFilesIgnoredByDefault(t *testing.T) {
+	root, ix := docxTree(t)
+	os.WriteFile(filepath.Join(root, "~$spec.docx"), []byte("owner"), 0o644)
+	if s, _ := ix.Index(root, nil, false); s.Failed != 0 || s.New != 2 {
+		t.Fatalf("%+v", s)
+	}
+}
+
+func TestFailedDocxNotReconvertedUntilChanged(t *testing.T) {
+	root, ix := docxTree(t)
+	bad := filepath.Join(root, "bad.docx")
+	os.WriteFile(bad, []byte("not a zip"), 0o644)
+	ix.Failures = map[string]Failure{}
+	ix.Index(root, nil, true)
+	ix.Pandoc = filepath.Join(t.TempDir(), "must-not-run") // a second pandoc run would error differently
+	s, _ := ix.Index(root, nil, true)
+	if s.Failed != 1 || len(s.Errors) != 1 || strings.Contains(s.Errors[0], "must-not-run") {
+		t.Fatalf("re-ran pandoc: %+v", s)
+	}
+	future := time.Now().Add(time.Minute)
+	os.Chtimes(bad, future, future)
+	if s, _ := ix.Index(root, nil, true); !strings.Contains(s.Errors[0], "must-not-run") {
+		t.Fatalf("changed file not retried: %+v", s)
 	}
 }

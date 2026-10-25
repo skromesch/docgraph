@@ -33,6 +33,13 @@ func (s Summary) Changed() bool {
 	return s.New+s.Modified+s.Deleted+s.Failed+s.ChunksEmbedded+s.EmbeddingsReused > 0
 }
 
+// Failure is a failed conversion and the file state it failed on.
+type Failure struct {
+	Size  int64
+	Mtime float64
+	Err   string
+}
+
 // Progress is called with (done, total, label).
 type Progress func(done, total int, label string)
 
@@ -43,7 +50,10 @@ type Indexer struct {
 	Count      chunk.Counter
 	ConvertDir string // hidden Markdown of .docx files
 	Pandoc     string // "" = not available: .docx files are skipped
-	vectors    store.SqliteVec
+	// Failures remembers .docx files pandoc failed on, so a long-lived caller
+	// (the MCP server's auto-sync) retries one only after it changes. nil = off.
+	Failures map[string]Failure
+	vectors  store.SqliteVec
 }
 
 func New(db *store.DB, cfg config.Config, e embed.Embedder, count chunk.Counter) *Indexer {
@@ -127,11 +137,21 @@ func (ix *Indexer) Index(root string, progress Progress, quickCheck bool) (Summa
 				s.SkippedDocx = append(s.SkippedDocx, rel)
 				continue
 			}
-			if text, err = ix.convertDocx(rel, full); err != nil {
-				s.Failed++
-				s.Errors = append(s.Errors, fmt.Sprintf("%s: %v", rel, err))
+			if f, ok := ix.Failures[rel]; ok && f.Size == st.Size() && f.Mtime == Mtime(st) {
+				s.Failed++ // unchanged since pandoc last failed on it: do not run it again
+				s.Errors = append(s.Errors, f.Err)
 				continue
 			}
+			if text, err = ix.convertDocx(rel, full); err != nil {
+				msg := fmt.Sprintf("%s: %v", rel, err)
+				if ix.Failures != nil {
+					ix.Failures[rel] = Failure{st.Size(), Mtime(st), msg}
+				}
+				s.Failed++
+				s.Errors = append(s.Errors, msg)
+				continue
+			}
+			delete(ix.Failures, rel)
 		}
 		n, err := ix.indexDocument(rel, text, len(raw), contentHash, st, opts)
 		if err != nil {

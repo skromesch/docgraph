@@ -91,3 +91,13 @@ func TestAutoSyncWarnsOnce(t *testing.T) {
 		t.Fatalf("%d warnings:\n%s", n, buf.String())
 	}
 }
+
+func TestReadDocxMissingConvertedWithoutPandoc(t *testing.T) {
+	svc, _ := docxService(t, "spec.docx", config.Default())
+	os.RemoveAll(convert.Dir(svc.DB.Path))
+	svc.Cfg.Convert.PandocPath = filepath.Join(t.TempDir(), "no-pandoc")
+	out := svc.ReadDocument("spec.docx", 1, 0)
+	if !strings.Contains(out, "converted text of spec.docx is missing and pandoc was not found") || strings.Contains(out, "skipped") {
+		t.Fatalf("read:\n%s", out)
+	}
+}
