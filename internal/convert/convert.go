@@ -88,3 +88,23 @@ func Warning(n int) string {
 	return fmt.Sprintf("warning: %d .docx file(s) skipped: pandoc not found. Install it (%s) or set convert.pandoc_path in .docgraph/config.yaml",
 		n, InstallHint())
 }
+
+// Write stores converted text atomically (temp file + rename).
+func Write(path, text string) error {
+	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+		return err
+	}
+	tmp, err := os.CreateTemp(filepath.Dir(path), ".tmp-*")
+	if err != nil {
+		return err
+	}
+	_, werr := tmp.WriteString(text)
+	if cerr := tmp.Close(); werr == nil {
+		werr = cerr
+	}
+	if werr != nil {
+		os.Remove(tmp.Name())
+		return werr
+	}
+	return os.Rename(tmp.Name(), path)
+}

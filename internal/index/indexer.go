@@ -10,6 +10,7 @@ import (
 
 	"github.com/skromesch/docgraph/internal/chunk"
 	"github.com/skromesch/docgraph/internal/config"
+	"github.com/skromesch/docgraph/internal/convert"
 	"github.com/skromesch/docgraph/internal/embed"
 	"github.com/skromesch/docgraph/internal/hashing"
 	"github.com/skromesch/docgraph/internal/model"
@@ -20,6 +21,8 @@ import (
 
 type Summary struct {
 	Scanned, Unchanged, Modified, New, Deleted, Failed int
+	Skipped                                            int      // .docx left out: no pandoc
+	SkippedDocx                                        []string // their paths
 	ChunksCreated, ChunksEmbedded, EmbeddingsReused    int
 	Seconds                                            float64
 	Errors                                             []string
@@ -34,11 +37,13 @@ func (s Summary) Changed() bool {
 type Progress func(done, total int, label string)
 
 type Indexer struct {
-	DB       *store.DB
-	Cfg      config.Config
-	Embedder embed.Embedder // nil: BM25 only; chunks stay pending for a later run
-	Count    chunk.Counter
-	vectors  store.SqliteVec
+	DB         *store.DB
+	Cfg        config.Config
+	Embedder   embed.Embedder // nil: BM25 only; chunks stay pending for a later run
+	Count      chunk.Counter
+	ConvertDir string // hidden Markdown of .docx files
+	Pandoc     string // "" = not available: .docx files are skipped
+	vectors    store.SqliteVec
 }
 
 func New(db *store.DB, cfg config.Config, e embed.Embedder, count chunk.Counter) *Indexer {
@@ -46,7 +51,9 @@ func New(db *store.DB, cfg config.Config, e embed.Embedder, count chunk.Counter)
 		count = chunk.GetCounter(cfg.Embedding.Model)
 	}
 	// deletions always reach the vector table, even without an embedder
-	return &Indexer{DB: db, Cfg: cfg, Embedder: e, Count: count, vectors: store.SqliteVec{DB: db}}
+	pandoc, _ := convert.FindPandoc(cfg.Convert.PandocPath)
+	return &Indexer{DB: db, Cfg: cfg, Embedder: e, Count: count, ConvertDir: convert.Dir(db.Path), Pandoc: pandoc,
+		vectors: store.SqliteVec{DB: db}}
 }
 
 // Mtime is the modification time in float seconds (sec + nsec * 1e-9), the
@@ -113,7 +120,20 @@ func (ix *Indexer) Index(root string, progress Progress, quickCheck bool) (Summa
 			s.Unchanged++
 			continue
 		}
-		n, err := ix.indexDocument(rel, raw, contentHash, st, opts)
+		text := textutil.DecodeFile(raw)
+		if convert.IsDocx(rel) {
+			if ix.Pandoc == "" { // keep any indexed version until pandoc is back
+				s.Skipped++
+				s.SkippedDocx = append(s.SkippedDocx, rel)
+				continue
+			}
+			if text, err = ix.convertDocx(rel, full); err != nil {
+				s.Failed++
+				s.Errors = append(s.Errors, fmt.Sprintf("%s: %v", rel, err))
+				continue
+			}
+		}
+		n, err := ix.indexDocument(rel, text, len(raw), contentHash, st, opts)
 		if err != nil {
 			s.Failed++
 			s.Errors = append(s.Errors, fmt.Sprintf("%s: %v", rel, err))
@@ -138,6 +158,9 @@ func (ix *Indexer) Index(root string, progress Progress, quickCheck bool) (Summa
 		id := existing[rel].ID
 		if err := ix.DB.Tx(func(tx *store.Tx) error { return ix.deleteDocument(tx, id) }); err != nil {
 			return s, err
+		}
+		if convert.IsDocx(rel) {
+			os.Remove(convert.Path(ix.ConvertDir, rel))
 		}
 		s.Deleted++
 	}
@@ -171,15 +194,15 @@ func (ix *Indexer) Index(root string, progress Progress, quickCheck bool) (Summa
 
 // indexDocument re-chunks one file in its own transaction (a crash leaves the
 // previous version or the new one, never a mix).
-func (ix *Indexer) indexDocument(rel string, raw []byte, contentHash string, st os.FileInfo, opts chunk.Options) (int, error) {
+func (ix *Indexer) indexDocument(rel, text string, size int, contentHash string, st os.FileInfo, opts chunk.Options) (int, error) {
 	p := parse.For(rel)
 	if p == nil {
 		return 0, fmt.Errorf("no parser for %s", rel)
 	}
-	parsed := p.Parse(rel, textutil.DecodeFile(raw))
+	parsed := p.Parse(rel, text)
 	chunks := chunk.Document(rel, parsed, opts, ix.Count)
 	doc := model.Document{ID: hashing.DocumentID(rel), Path: rel, Title: parsed.Title, Type: parsed.Type,
-		ContentHash: contentHash, SizeBytes: int64(len(raw)), ModifiedAt: Mtime(st), IndexedAt: store.UnixNow()}
+		ContentHash: contentHash, SizeBytes: int64(size), ModifiedAt: Mtime(st), IndexedAt: store.UnixNow()}
 	err := ix.DB.Tx(func(tx *store.Tx) error {
 		if err := ix.deleteChunks(tx, doc.ID); err != nil {
 			return err
@@ -302,4 +325,14 @@ func (ix *Indexer) embedPending(progress Progress) (int, int, error) {
 		return nil
 	})
 	return len(todo), len(todoRows) - len(todo), err
+}
+
+// convertDocx runs pandoc and writes the hidden Markdown atomically; the
+// returned text is what gets indexed and what read_document serves.
+func (ix *Indexer) convertDocx(rel, full string) (string, error) {
+	text, err := convert.Docx(ix.Pandoc, full)
+	if err != nil {
+		return "", err
+	}
+	return text, convert.Write(convert.Path(ix.ConvertDir, rel), text)
 }

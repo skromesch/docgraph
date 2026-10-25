@@ -48,6 +48,7 @@ func init() {
 	register(PlantUML{})
 	register(Mermaid{})
 	register(Text{})
+	register(Docx{})
 }
 
 // For returns the parser for a path by its (lower-cased) suffix, or nil.

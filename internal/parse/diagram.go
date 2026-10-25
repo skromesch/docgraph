@@ -113,3 +113,16 @@ func (Text) Parse(p, text string) Document {
 	}
 	return Document{Title: title, Type: "text", Sections: sections}
 }
+
+// Docx parses the Markdown that pandoc made from a Word document (see
+// internal/convert); only the document type differs from Markdown.
+type Docx struct{}
+
+func (Docx) Type() string         { return "docx" }
+func (Docx) Extensions() []string { return []string{".docx"} }
+
+func (Docx) Parse(p, text string) Document {
+	d := Markdown{}.Parse(p, text)
+	d.Type = "docx"
+	return d
+}
