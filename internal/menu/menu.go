@@ -14,6 +14,7 @@ import (
 
 	"github.com/skromesch/docgraph/internal/chunk"
 	"github.com/skromesch/docgraph/internal/config"
+	"github.com/skromesch/docgraph/internal/convert"
 	"github.com/skromesch/docgraph/internal/embed"
 	"github.com/skromesch/docgraph/internal/index"
 	"github.com/skromesch/docgraph/internal/search"
@@ -78,6 +79,8 @@ func (m *menu) loop() error {
 			err = m.ignoreMenu()
 		case "model":
 			err = m.modelMenu()
+		case "pandoc":
+			err = m.pandocMenu()
 		case "search":
 			err = m.trySearch()
 		case "register":
@@ -139,6 +142,7 @@ func (m *menu) status() ([]choice, error) {
 		m.ui.printf("Index: %d documents, %d chunks (%d embedded)   ignore rules: %d\n",
 			s.Documents, s.Chunks, s.ChunksEmbedded, len(index.Patterns(lines))+len(index.Patterns(cfg.Index.Ignore)))
 	}
+	m.ui.printf("%s\n", pandocStatus(cfg))
 	m.ui.printf("Model: %s   ONNX Runtime: %s\n\n", okStr(modelOK), okStr(runtimeOK))
 
 	var opts []choice
@@ -153,6 +157,7 @@ func (m *menu) status() ([]choice, error) {
 	}
 	opts = append(opts,
 		choice{"Model and ONNX Runtime: status / download", "model"},
+		choice{"Pandoc (Word .docx support): status / path", "pandoc"},
 		choice{"Register the MCP server with Claude Code", "register"},
 		choice{"Quit", "quit"})
 	return opts, nil
@@ -286,6 +291,42 @@ func (m *menu) runIndex(dir string, quick bool) error {
 	for _, e := range s.Errors {
 		m.ui.printf("  error: %s\n", e)
 	}
+	if s.Skipped > 0 {
+		m.ui.printf("  %s\n", convert.Warning(s.Skipped))
+	}
+	return nil
+}
+
+func pandocStatus(cfg config.Config) string {
+	if p, err := convert.FindPandoc(cfg.Convert.PandocPath); err == nil {
+		return "Pandoc: ✓ " + p
+	}
+	return "Pandoc: ✗ not found (" + convert.InstallHint() + "); .docx files are skipped"
+}
+
+// pandocMenu shows where pandoc was found and saves convert.pandoc_path.
+func (m *menu) pandocMenu() error {
+	m.ui.printf("\n%s\n", pandocStatus(m.cfg))
+	p, err := m.ui.input("Pandoc path", "empty = pandoc from PATH", m.cfg.Convert.PandocPath, func(s string) error {
+		if s = strings.TrimSpace(s); s != "" {
+			_, err := convert.FindPandoc(s)
+			return err
+		}
+		return nil
+	})
+	if err != nil {
+		return err
+	}
+	cfg, err := config.Load(m.root)
+	if err != nil {
+		return err
+	}
+	cfg.Convert.PandocPath = strings.TrimSpace(p)
+	if _, err := config.Save(m.root, cfg); err != nil {
+		return err
+	}
+	m.cfg = cfg
+	m.ui.printf("✓ saved. %s\n", pandocStatus(cfg))
 	return nil
 }
 

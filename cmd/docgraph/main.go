@@ -2,14 +2,18 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 	"sort"
+	"strings"
 
 	"github.com/spf13/cobra"
 
 	"github.com/skromesch/docgraph/internal/config"
+	"github.com/skromesch/docgraph/internal/convert"
+	"github.com/skromesch/docgraph/internal/index"
 	"github.com/skromesch/docgraph/internal/menu"
 	"github.com/skromesch/docgraph/internal/store"
 )
@@ -76,15 +80,19 @@ func initCmd() *cobra.Command {
 }
 
 func statsCmd() *cobra.Command {
-	return &cobra.Command{
+	var unindexed bool
+	cmd := &cobra.Command{
 		Use:   "stats",
 		Short: "Show index statistics.",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			root, _, db, err := openProject()
+			root, cfg, db, err := openProject()
 			if err != nil {
 				return err
 			}
 			defer db.Close()
+			if unindexed {
+				return printUnindexed(db, cfg)
+			}
 			s, err := db.Stats()
 			if err != nil {
 				return err
@@ -105,4 +113,44 @@ func statsCmd() *cobra.Command {
 			return nil
 		},
 	}
+	cmd.Flags().BoolVar(&unindexed, "unindexed", false, "List files in the docs folder that are not indexed, and why.")
+	return cmd
+}
+
+// printUnindexed lists "path | reason" lines, then a count per reason.
+func printUnindexed(db *store.DB, cfg config.Config) error {
+	source, _ := db.GetMeta("source_root")
+	if st, err := os.Stat(source); source == "" || err != nil || !st.IsDir() {
+		return errors.New("no indexed directory yet; run `docgraph index <dir>` first")
+	}
+	docs, err := db.Documents()
+	if err != nil {
+		return err
+	}
+	indexed := make(map[string]bool, len(docs))
+	for p := range docs {
+		indexed[p] = true
+	}
+	_, perr := convert.FindPandoc(cfg.Convert.PandocPath)
+	list, err := index.ListUnindexed(source, cfg, perr == nil, indexed)
+	if err != nil {
+		return err
+	}
+	counts := map[string]int{}
+	var reasons []string
+	for _, u := range list {
+		fmt.Printf("%s | %s\n", u.Path, u.Reason)
+		r, _, _ := strings.Cut(u.Reason, ":") // "ignored: <pattern>" counts as "ignored"
+		if counts[r]++; counts[r] == 1 {
+			reasons = append(reasons, r)
+		}
+	}
+	sort.Strings(reasons)
+	for _, r := range reasons {
+		fmt.Printf("-- %s: %d\n", r, counts[r])
+	}
+	if len(list) == 0 {
+		fmt.Println("Every supported file is indexed.")
+	}
+	return nil
 }

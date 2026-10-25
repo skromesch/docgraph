@@ -10,6 +10,7 @@ import (
 
 	"github.com/skromesch/docgraph/internal/chunk"
 	"github.com/skromesch/docgraph/internal/config"
+	"github.com/skromesch/docgraph/internal/convert"
 	"github.com/skromesch/docgraph/internal/embed"
 	"github.com/skromesch/docgraph/internal/index"
 	"github.com/skromesch/docgraph/internal/store"
@@ -36,12 +37,20 @@ func progress(done, total int, label string) {
 }
 
 func printSummary(s index.Summary) {
-	fmt.Printf("Documents scanned: %d\nUnchanged: %d\nModified: %d\nNew: %d\nDeleted: %d\nFailed: %d\n"+
+	fmt.Printf("Documents scanned: %d\nUnchanged: %d\nModified: %d\nNew: %d\nDeleted: %d\nFailed: %d\nSkipped: %d\n"+
 		"Chunks created: %d\nChunks embedded: %d\nEmbeddings reused: %d\nTime: %.2fs\n",
-		s.Scanned, s.Unchanged, s.Modified, s.New, s.Deleted, s.Failed,
+		s.Scanned, s.Unchanged, s.Modified, s.New, s.Deleted, s.Failed, s.Skipped,
 		s.ChunksCreated, s.ChunksEmbedded, s.EmbeddingsReused, s.Seconds)
+	printProblems(s)
+}
+
+// printProblems writes per-file errors and the pandoc notice to stderr.
+func printProblems(s index.Summary) {
 	for _, e := range s.Errors {
 		fmt.Fprintf(os.Stderr, "  error: %s\n", e)
+	}
+	if s.Skipped > 0 {
+		fmt.Fprintln(os.Stderr, convert.Warning(s.Skipped))
 	}
 }
 
@@ -132,13 +141,12 @@ func syncCmd() *cobra.Command {
 			}
 			if !s.Changed() {
 				fmt.Printf("Up to date (%d documents, %.2fs).\n", s.Scanned, s.Seconds)
+				printProblems(s)
 				return nil
 			}
 			fmt.Printf("Synced %s: %d new, %d modified, %d deleted, %d failed; %d chunks, %d embedded (%d reused) in %.2fs\n",
 				source, s.New, s.Modified, s.Deleted, s.Failed, s.ChunksCreated, s.ChunksEmbedded, s.EmbeddingsReused, s.Seconds)
-			for _, e := range s.Errors {
-				fmt.Fprintf(os.Stderr, "  error: %s\n", e)
-			}
+			printProblems(s)
 			return nil
 		},
 	}

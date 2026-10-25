@@ -48,7 +48,7 @@ func TestPlainMenuFlow(t *testing.T) {
 		"y",     // save
 		"n",     // sync now? no
 		"4",     // back
-		"7",     // Quit
+		"8",     // Quit
 	}, "\n") + "\n"
 	var out, errOut bytes.Buffer
 	deps := Deps{NewEmbedder: func(config.Config) (embed.Embedder, error) { return nil, errors.New("unused") }, Exe: "/x/docgraph"}
@@ -98,7 +98,7 @@ func TestPlainSetupIgnoreBeforeIndex(t *testing.T) {
 		"y",     // save
 		"1",     // Continue: index 5 files
 		"n",     // no model
-		"7",     // Quit
+		"8",     // Quit
 	}, "\n") + "\n"
 	var out, errOut bytes.Buffer
 	deps := Deps{NewEmbedder: func(config.Config) (embed.Embedder, error) { return nil, errors.New("unused") }, Exe: "/x/docgraph"}
@@ -107,5 +107,36 @@ func TestPlainSetupIgnoreBeforeIndex(t *testing.T) {
 	}
 	if o := out.String(); !strings.Contains(o, "Continue: index 5 files") || !strings.Contains(o, "5 documents: 5 new") {
 		t.Errorf("output:\n%s", o)
+	}
+}
+
+// The pandoc entry saves convert.pandoc_path; the header shows what was found.
+func TestPlainPandocPath(t *testing.T) {
+	fixtures, _ := filepath.Abs("../../testdata/fixtures/wiki")
+	dir := t.TempDir()
+	copyTree(t, fixtures, filepath.Join(dir, "wiki"))
+	t.Setenv("DOCGRAPH_MODEL_DIR", t.TempDir())
+	t.Setenv("DOCGRAPH_LIB_DIR", t.TempDir())
+	t.Setenv("PATH", t.TempDir()) // no pandoc on PATH
+	fake := filepath.Join(dir, "bin", "pandoc")
+	os.MkdirAll(filepath.Dir(fake), 0o755)
+	os.WriteFile(fake, []byte("#!/bin/sh\n"), 0o755)
+	t.Chdir(dir)
+	input := strings.Join([]string{"1", "y", "wiki", "1", "n",
+		"6",  // Pandoc (Word .docx support)
+		fake, // path
+		"8",  // Quit
+	}, "\n") + "\n"
+	var out, errOut bytes.Buffer
+	deps := Deps{NewEmbedder: func(config.Config) (embed.Embedder, error) { return nil, errors.New("unused") }, Exe: "/x/docgraph"}
+	if code := Run(strings.NewReader(input), &out, &errOut, true, deps); code != 0 {
+		t.Fatalf("exit %d\nstderr: %s\nout: %s", code, errOut.String(), out.String())
+	}
+	o := out.String()
+	if !strings.Contains(o, "Pandoc: ✗ not found") || !strings.Contains(o, "Pandoc: ✓ "+fake) {
+		t.Errorf("output:\n%s", o)
+	}
+	if cfg, _ := config.Load(dir); cfg.Convert.PandocPath != fake {
+		t.Errorf("pandoc_path = %q", cfg.Convert.PandocPath)
 	}
 }

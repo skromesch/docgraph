@@ -18,7 +18,11 @@ const IgnoreFile = ".docgraphignore"
 
 // Ignore matches gitignore-style patterns: config patterns first, then
 // <root>/.docgraphignore; the last matching pattern wins.
-type Ignore struct{ m gitignore.Matcher }
+type Ignore struct {
+	m     gitignore.Matcher
+	ps    []gitignore.Pattern
+	lines []string // source line of each pattern in ps
+}
 
 func LoadIgnore(root string, patterns []string) Ignore {
 	lines := append([]string{}, patterns...)
@@ -32,14 +36,31 @@ func LoadIgnore(root string, patterns []string) Ignore {
 // NewIgnore builds a matcher from pattern lines (comments and blanks are skipped).
 func NewIgnore(lines []string) Ignore {
 	var ps []gitignore.Pattern
+	var src []string
 	for _, l := range lines {
 		l = norm.NFC.String(l)
-		if t := strings.TrimSpace(l); t == "" || strings.HasPrefix(t, "#") {
+		t := strings.TrimSpace(l)
+		if t == "" || strings.HasPrefix(t, "#") {
 			continue
 		}
 		ps = append(ps, gitignore.ParsePattern(l, nil))
+		src = append(src, t)
 	}
-	return Ignore{gitignore.NewMatcher(ps)}
+	return Ignore{gitignore.NewMatcher(ps), ps, src}
+}
+
+// MatchPattern is Match that also names the deciding pattern line.
+func (ig Ignore) MatchPattern(rel string, isDir bool) (string, bool) {
+	parts := strings.Split(rel, "/")
+	for i := len(ig.ps) - 1; i >= 0; i-- { // last match wins
+		switch ig.ps[i].Match(parts, isDir) {
+		case gitignore.Exclude:
+			return ig.lines[i], true
+		case gitignore.Include:
+			return "", false
+		}
+	}
+	return "", false
 }
 
 // Match reports whether rel (NFC, "/"-separated, relative to the root) is ignored.
