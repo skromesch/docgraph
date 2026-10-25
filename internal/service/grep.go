@@ -9,7 +9,7 @@ import (
 
 	"golang.org/x/text/unicode/norm"
 
-	"github.com/skromesch/docgraph/internal/pyutil"
+	"github.com/skromesch/docgraph/internal/textutil"
 )
 
 const (
@@ -30,14 +30,14 @@ func (s *Service) Grep(pattern string, regex bool, glob string, ignoreCase bool,
 
 func (s *Service) grep(pattern string, regex bool, glob string, ignoreCase bool, maxResults int, filesOnly bool) string {
 	pattern = norm.NFC.String(pattern)
-	if pyutil.Strip(pattern) == "" {
+	if textutil.Strip(pattern) == "" {
 		return "Empty pattern."
 	}
 	maxResults = max(1, min(maxResults, MaxGrepResults))
 	var match func(string) bool
 	switch {
 	case regex:
-		expr := PyRegex(pattern)
+		expr := UnicodeRegex(pattern)
 		if ignoreCase {
 			expr = "(?i)" + expr
 		}
@@ -47,8 +47,8 @@ func (s *Service) grep(pattern string, regex bool, glob string, ignoreCase bool,
 		}
 		match = rx.MatchString
 	case ignoreCase:
-		needle := pyutil.Lower(pattern)
-		match = func(l string) bool { return strings.Contains(pyutil.Lower(l), needle) }
+		needle := textutil.Lower(pattern)
+		match = func(l string) bool { return strings.Contains(textutil.Lower(l), needle) }
 	default:
 		match = func(l string) bool { return strings.Contains(l, pattern) }
 	}
@@ -66,7 +66,7 @@ func (s *Service) grep(pattern string, regex bool, glob string, ignoreCase bool,
 			paths = append(paths, p)
 		}
 	}
-	sort.Strings(paths) // UTF-8 byte order = Python's code point order
+	sort.Strings(paths) // UTF-8 byte order = code point order
 	var groups []string
 	total, files := 0, 0
 	for _, p := range paths {
@@ -83,7 +83,7 @@ func (s *Service) grep(pattern string, regex bool, glob string, ignoreCase bool,
 			line string
 		}
 		var hits []hit
-		for i, l := range pyutil.SplitLines(norm.NFC.String(pyutil.DecodeFile(raw))) {
+		for i, l := range textutil.SplitLines(norm.NFC.String(textutil.DecodeFile(raw))) {
 			if match(l) {
 				hits = append(hits, hit{i + 1, l})
 			}
@@ -106,7 +106,7 @@ func (s *Service) grep(pattern string, regex bool, glob string, ignoreCase bool,
 		}
 		rows := make([]string, 0, min(room, len(hits)))
 		for _, h := range hits[:min(room, len(hits))] {
-			l := pyutil.Strip(h.line)
+			l := textutil.Strip(h.line)
 			if r := []rune(l); len(r) > GrepLineChars {
 				l = string(r[:GrepLineChars]) + "…"
 			}
@@ -142,10 +142,10 @@ func matches(n int) string {
 	return fmt.Sprintf("%d matches", n)
 }
 
-// PyRegex makes the common Python re escapes Unicode-aware for RE2, as the agent
-// writes Python-style patterns: \w \W \d \D \s \S. Inside a class only the
+// UnicodeRegex makes the common Perl-style escapes Unicode-aware for RE2, as agents
+// write them: \w \W \d \D \s \S. Inside a class only the
 // positive forms are rewritten. Other syntax goes to RE2 unchanged.
-func PyRegex(p string) string {
+func UnicodeRegex(p string) string {
 	var b strings.Builder
 	inClass := false
 	for i := 0; i < len(p); i++ {
@@ -155,21 +155,21 @@ func PyRegex(p string) string {
 			i++
 			switch {
 			case e == 'w' && inClass:
-				b.WriteString(pyutil.Word)
+				b.WriteString(textutil.Word)
 			case e == 'w':
-				b.WriteString("[" + pyutil.Word + "]")
+				b.WriteString("[" + textutil.Word + "]")
 			case e == 'W' && !inClass:
-				b.WriteString("[^" + pyutil.Word + "]")
+				b.WriteString("[^" + textutil.Word + "]")
 			case e == 'd':
 				b.WriteString(`\p{Nd}`)
 			case e == 'D' && !inClass:
 				b.WriteString(`\P{Nd}`)
 			case e == 's' && inClass:
-				b.WriteString(pyutil.Space)
+				b.WriteString(textutil.Space)
 			case e == 's':
-				b.WriteString("[" + pyutil.Space + "]")
+				b.WriteString("[" + textutil.Space + "]")
 			case e == 'S' && !inClass:
-				b.WriteString("[^" + pyutil.Space + "]")
+				b.WriteString("[^" + textutil.Space + "]")
 			default:
 				b.WriteByte('\\')
 				b.WriteByte(e)

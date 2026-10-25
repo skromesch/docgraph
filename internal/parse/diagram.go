@@ -4,13 +4,13 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/skromesch/docgraph/internal/pyutil"
+	"github.com/skromesch/docgraph/internal/textutil"
 )
 
 var (
-	s         = "[" + pyutil.Space + "]"
-	pumlStart = regexp.MustCompile(`(?i)^` + s + `*@start([` + pyutil.Word + `]+)(?:` + s + `+(.+?))?` + s + `*$`)
-	pumlEnd   = regexp.MustCompile(`(?i)^` + s + `*@end[` + pyutil.Word + `]+` + s + `*$`)
+	s         = "[" + textutil.Space + "]"
+	pumlStart = regexp.MustCompile(`(?i)^` + s + `*@start([` + textutil.Word + `]+)(?:` + s + `+(.+?))?` + s + `*$`)
+	pumlEnd   = regexp.MustCompile(`(?i)^` + s + `*@end[` + textutil.Word + `]+` + s + `*$`)
 	titleRE   = regexp.MustCompile(`(?i)^` + s + `*title` + s + `*:?` + s + `*(.+?)` + s + `*$`)
 )
 

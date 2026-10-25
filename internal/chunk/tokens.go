@@ -9,14 +9,14 @@ import (
 
 	"github.com/daulet/tokenizers"
 
-	"github.com/skromesch/docgraph/internal/pyutil"
+	"github.com/skromesch/docgraph/internal/textutil"
 )
 
 // Counter returns the number of tokens in a text.
 type Counter func(string) int
 
-// Heuristic is chars/4 rounded up (code points, like Python's len).
-func Heuristic(text string) int { return (pyutil.Len(text) + 3) / 4 }
+// Heuristic is chars/4 rounded up (code points).
+func Heuristic(text string) int { return (textutil.Len(text) + 3) / 4 }
 
 // HFCounter counts tokens with the model's own Hugging Face tokenizer
 // (tokenizer.json), without special tokens, like sentence-transformers.

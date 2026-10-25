@@ -3,8 +3,8 @@ package search
 import (
 	"github.com/skromesch/docgraph/internal/embed"
 	"github.com/skromesch/docgraph/internal/model"
-	"github.com/skromesch/docgraph/internal/pyutil"
 	"github.com/skromesch/docgraph/internal/store"
+	"github.com/skromesch/docgraph/internal/textutil"
 )
 
 // Vector: embed the query, k-NN in the vector store.
@@ -24,7 +24,7 @@ func NewVector(db *store.DB, e embed.Embedder, vs store.VectorStore) (*Vector, e
 }
 
 func (v *Vector) SearchRowids(query string, k int) ([]store.Hit, error) {
-	if pyutil.Strip(query) == "" {
+	if textutil.Strip(query) == "" {
 		return nil, nil
 	}
 	q, err := v.Embedder.Embed([]string{query}, embed.Query)

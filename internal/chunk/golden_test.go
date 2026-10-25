@@ -18,8 +18,8 @@ import (
 	"github.com/skromesch/docgraph/internal/config"
 	"github.com/skromesch/docgraph/internal/model"
 	"github.com/skromesch/docgraph/internal/parse"
-	"github.com/skromesch/docgraph/internal/pyutil"
 	"github.com/skromesch/docgraph/internal/testutil"
+	"github.com/skromesch/docgraph/internal/textutil"
 )
 
 type goldenChunk struct {
@@ -76,7 +76,7 @@ func runGolden(t *testing.T, name string, opts Options, count Counter) {
 				t.Fatalf("%s: %v", g.Path, err)
 			}
 		}
-		parsed := parse.For(g.Path).Parse(g.Path, pyutil.DecodeFile(raw))
+		parsed := parse.For(g.Path).Parse(g.Path, textutil.DecodeFile(raw))
 		got := goldenChunks(Document(g.Path, parsed, opts, count))
 		docs++
 		chunks += len(got)
@@ -138,7 +138,7 @@ func writeGolden(t *testing.T, name, root string, opts Options, count Counter) {
 			t.Fatal(err)
 		}
 		path := norm.NFC.String(file)
-		parsed := parse.For(path).Parse(path, pyutil.DecodeFile(raw))
+		parsed := parse.For(path).Parse(path, textutil.DecodeFile(raw))
 		sections := make([][]any, len(parsed.Sections))
 		for i, s := range parsed.Sections {
 			sections[i] = []any{s.Heading, s.Level, s.Path, s.StartLine, s.EndLine, s.HasBody}

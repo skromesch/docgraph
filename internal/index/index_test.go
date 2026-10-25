@@ -292,7 +292,7 @@ func TestDeleteWithoutEmbedderLeavesNoOrphans(t *testing.T) {
 	}
 }
 
-func TestMtimeMatchesPython(t *testing.T) {
+func TestMtimeFloatSeconds(t *testing.T) {
 	// st_mtime = sec + nsec * 1e-9 as a double
 	st, _ := os.Stat("index_test.go")
 	m := Mtime(st)

@@ -4,7 +4,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/skromesch/docgraph/internal/pyutil"
+	"github.com/skromesch/docgraph/internal/textutil"
 )
 
 var (
@@ -12,7 +12,7 @@ var (
 	fenceRE  = regexp.MustCompile("^ {0,3}(`{3,}|~{3,})")
 	setextH1 = regexp.MustCompile(`^ {0,3}=+[ \t]*$`)
 	setextH2 = regexp.MustCompile(`^ {0,3}-+[ \t]*$`)
-	noiseRE  = regexp.MustCompile(`^[` + pyutil.Space + `]*\[\[_(TOC|TOSP)_\]\][` + pyutil.Space + `]*$`)
+	noiseRE  = regexp.MustCompile(`^[` + textutil.Space + `]*\[\[_(TOC|TOSP)_\]\][` + textutil.Space + `]*$`)
 	linkRE   = regexp.MustCompile(`\[([^\]]*)\]\([^)]*\)`)
 	emphRE   = regexp.MustCompile("[*_`]")
 )
@@ -23,7 +23,7 @@ var FenceRE = fenceRE
 func cleanHeading(text string) string {
 	text = linkRE.ReplaceAllString(text, "${1}")
 	text = emphRE.ReplaceAllString(text, "")
-	return pyutil.Strip(text)
+	return textutil.Strip(text)
 }
 
 type heading struct {
@@ -36,9 +36,9 @@ func findHeadings(lines []string) []heading {
 	var out []heading
 	fence := ""
 	start := 0
-	if len(lines) > 0 && pyutil.Strip(lines[0]) == "---" {
+	if len(lines) > 0 && textutil.Strip(lines[0]) == "---" {
 		for i := 1; i < len(lines); i++ {
-			if s := pyutil.Strip(lines[i]); s == "---" || s == "..." {
+			if s := textutil.Strip(lines[i]); s == "---" || s == "..." {
 				start = i + 1
 				break
 			}
@@ -51,7 +51,7 @@ func findHeadings(lines []string) []heading {
 			if fence == "" {
 				fence = strings.Repeat(marker[:1], len(marker))
 			} else if marker[0] == fence[0] && len(marker) >= len(fence) &&
-				pyutil.Strip(pyutil.Strip(line)[len(marker):]) == "" {
+				textutil.Strip(textutil.Strip(line)[len(marker):]) == "" {
 				fence = ""
 			}
 			continue
@@ -67,9 +67,9 @@ func findHeadings(lines []string) []heading {
 			out = append(out, heading{i, len(hashes), cleanHeading(m[2])})
 			continue
 		}
-		if i > start && pyutil.Strip(lines[i-1]) != "" && (setextH1.MatchString(line) || setextH2.MatchString(line)) {
+		if i > start && textutil.Strip(lines[i-1]) != "" && (setextH1.MatchString(line) || setextH2.MatchString(line)) {
 			prev := lines[i-1]
-			p := pyutil.LStrip(prev)
+			p := textutil.LStrip(prev)
 			prevIsBlock := atxRE.MatchString(prev) || fenceRE.MatchString(prev) ||
 				strings.HasPrefix(p, "|") || strings.HasPrefix(p, ">") || strings.HasPrefix(p, "-") ||
 				strings.HasPrefix(p, "*") || strings.HasPrefix(p, "+") ||
@@ -103,7 +103,7 @@ func (Markdown) Parse(p, text string) Document {
 			}
 		}
 	}
-	if title == "" { // Python: `first_h1 or title_from_path` (an empty H1 text falls through)
+	if title == "" { // an empty H1 text falls through to the file name
 		title = TitleFromPath(p)
 	}
 	var rootPrefix []string
@@ -133,7 +133,7 @@ func (Markdown) Parse(p, text string) Document {
 		firstStart = bounds[0].idx
 	}
 	for _, l := range lines[:firstStart] {
-		if pyutil.Strip(l) != "" && !noiseRE.MatchString(l) {
+		if textutil.Strip(l) != "" && !noiseRE.MatchString(l) {
 			sections = append(sections, mdSection(title, 0, []string{title}, 0, firstStart, lines, 0))
 			break
 		}
@@ -159,7 +159,7 @@ func (Markdown) Parse(p, text string) Document {
 		stack = append(stack, open{b.level, htext})
 		prefix := rootPrefix
 		// no-H1 page whose top heading repeats the page title: don't prefix twice
-		if len(rootPrefix) > 0 && pyutil.Casefold(stack[0].text) == pyutil.Casefold(title) {
+		if len(rootPrefix) > 0 && textutil.Casefold(stack[0].text) == textutil.Casefold(title) {
 			prefix = nil
 		}
 		hpath := append([]string{}, prefix...)
@@ -173,7 +173,7 @@ func (Markdown) Parse(p, text string) Document {
 
 func mdSection(heading string, level int, path []string, start, end int, lines []string, bodyFrom int) Section {
 	// trim trailing blank lines so line ranges are tight
-	for end > start+1 && pyutil.Strip(lines[end-1]) == "" {
+	for end > start+1 && textutil.Strip(lines[end-1]) == "" {
 		end--
 	}
 	secLines := make([]string, 0, end-start)
@@ -186,7 +186,7 @@ func mdSection(heading string, level int, path []string, start, end int, lines [
 	hasBody := false
 	if bodyFrom < end {
 		for _, l := range lines[bodyFrom:end] {
-			if !noiseRE.MatchString(l) && pyutil.Strip(l) != "" {
+			if !noiseRE.MatchString(l) && textutil.Strip(l) != "" {
 				hasBody = true
 				break
 			}

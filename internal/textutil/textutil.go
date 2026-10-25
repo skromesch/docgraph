@@ -1,12 +1,11 @@
-// Package pyutil reproduces the Python string semantics the original
-// (Python) implementation used, so chunk boundaries, IDs and indexes stay
-// stable across the two.
+// Package textutil holds the Unicode string semantics the parser, chunker and
+// search rely on, so chunk boundaries, IDs and indexes stay stable.
 //
 // Differences from the Go standard library that matter here:
-//   - Python's str.isspace / regex \s also treat U+001C..U+001F as whitespace.
-//   - Python's regex \w is Unicode: letters, numbers and '_'.
-//   - len(str) counts code points, not bytes.
-package pyutil
+//   - whitespace (IsSpace, Space) also covers U+001C..U+001F.
+//   - Word is Unicode: letters, numbers and '_'.
+//   - Len counts code points, not bytes.
+package textutil
 
 import (
 	"strings"
@@ -16,10 +15,10 @@ import (
 	"golang.org/x/text/cases"
 )
 
-// Space is a regexp character-class body equivalent to Python's Unicode \s.
+// Space is a regexp character-class body for Unicode whitespace, including U+001C..U+001F.
 const Space = `\t\n\v\f\r \x{1c}-\x{1f}\x{85}\x{a0}\x{1680}\x{2000}-\x{200a}\x{2028}\x{2029}\x{202f}\x{205f}\x{3000}`
 
-// Word is a regexp character-class body equivalent to Python's Unicode \w.
+// Word is a regexp character-class body for Unicode word characters.
 const Word = `\p{L}\p{N}_`
 
 func IsSpace(r rune) bool { return unicode.IsSpace(r) || (r >= 0x1c && r <= 0x1f) }
@@ -27,12 +26,12 @@ func IsSpace(r rune) bool { return unicode.IsSpace(r) || (r >= 0x1c && r <= 0x1f
 func Strip(s string) string  { return strings.TrimFunc(s, IsSpace) }
 func LStrip(s string) string { return strings.TrimLeftFunc(s, IsSpace) }
 
-// Len counts code points, like Python's len(str).
+// Len counts code points, not bytes.
 func Len(s string) int { return utf8.RuneCountInString(s) }
 
 var folder = cases.Fold()
 
-// Casefold approximates Python's str.casefold (full Unicode case folding).
+// Casefold applies full Unicode case folding.
 func Casefold(s string) string { return folder.String(s) }
 
 // Unquote mirrors urllib.parse.unquote: %XX escapes become bytes, the result is
@@ -122,8 +121,7 @@ func bytesTrimBOM(b []byte) []byte {
 	return b
 }
 
-// Lower mirrors Python's str.lower(): unicode.ToLower plus the two
-// unconditional/contextual SpecialCasing rules CPython applies:
+// Lower is unicode.ToLower plus two SpecialCasing rules:
 // U+0130 'İ' -> "i̇", and capital sigma -> final 'ς' at the end of a word.
 func Lower(s string) string {
 	rs := []rune(s)

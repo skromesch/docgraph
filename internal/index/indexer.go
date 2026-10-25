@@ -14,8 +14,8 @@ import (
 	"github.com/skromesch/docgraph/internal/hashing"
 	"github.com/skromesch/docgraph/internal/model"
 	"github.com/skromesch/docgraph/internal/parse"
-	"github.com/skromesch/docgraph/internal/pyutil"
 	"github.com/skromesch/docgraph/internal/store"
+	"github.com/skromesch/docgraph/internal/textutil"
 )
 
 type Summary struct {
@@ -49,8 +49,8 @@ func New(db *store.DB, cfg config.Config, e embed.Embedder, count chunk.Counter)
 	return &Indexer{DB: db, Cfg: cfg, Embedder: e, Count: count, vectors: store.SqliteVec{DB: db}}
 }
 
-// Mtime mirrors Python's os.stat().st_mtime (sec + nsec * 1e-9 as a double),
-// so the quick check compares equal values across both implementations.
+// Mtime is the modification time in float seconds (sec + nsec * 1e-9), the
+// value stored for the quick check.
 func Mtime(st os.FileInfo) float64 {
 	t := st.ModTime()
 	return float64(t.Unix()) + float64(t.Nanosecond())*1e-9
@@ -81,7 +81,7 @@ func (ix *Indexer) Index(root string, progress Progress, quickCheck bool) (Summa
 	for p := range files {
 		paths = append(paths, p)
 	}
-	sort.Strings(paths) // Python sorts by code point; Go compares UTF-8 bytes: same order
+	sort.Strings(paths) // UTF-8 byte order = code point order
 	s.Scanned = len(paths)
 	opts := chunk.Options{TargetTokens: ic.TargetTokens, MaxTokens: ic.MaxTokens,
 		OverlapTokens: ic.OverlapTokens, MinSectionTokens: ic.MinSectionTokens}
@@ -176,7 +176,7 @@ func (ix *Indexer) indexDocument(rel string, raw []byte, contentHash string, st 
 	if p == nil {
 		return 0, fmt.Errorf("no parser for %s", rel)
 	}
-	parsed := p.Parse(rel, pyutil.DecodeFile(raw))
+	parsed := p.Parse(rel, textutil.DecodeFile(raw))
 	chunks := chunk.Document(rel, parsed, opts, ix.Count)
 	doc := model.Document{ID: hashing.DocumentID(rel), Path: rel, Title: parsed.Title, Type: parsed.Type,
 		ContentHash: contentHash, SizeBytes: int64(len(raw)), ModifiedAt: Mtime(st), IndexedAt: store.UnixNow()}

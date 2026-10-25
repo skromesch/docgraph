@@ -11,7 +11,7 @@ import (
 	"github.com/skromesch/docgraph/internal/store"
 )
 
-func TestPyRegex(t *testing.T) {
+func TestUnicodeRegex(t *testing.T) {
 	for in, want := range map[string]string{
 		`\w+`:     `[\p{L}\p{N}_]+`,
 		`[\w-]+`:  `[\p{L}\p{N}_-]+`,
@@ -21,8 +21,8 @@ func TestPyRegex(t *testing.T) {
 		`[]\w]`:   `[]\p{L}\p{N}_]`,
 		`[^]x]\w`: `[^]x][\p{L}\p{N}_]`,
 	} {
-		if got := PyRegex(in); got != want {
-			t.Errorf("PyRegex(%q) = %q, want %q", in, got, want)
+		if got := UnicodeRegex(in); got != want {
+			t.Errorf("UnicodeRegex(%q) = %q, want %q", in, got, want)
 		}
 	}
 }

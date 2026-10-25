@@ -74,7 +74,7 @@ The `grep` MCP tool complements search: it finds word parts and inflected forms 
 
 - It reads the indexed files only, so `.docgraphignore` applies.
 - Literal search is case-insensitive by default; patterns and files are NFC-normalized.
-- Regexes use RE2. `\w \W \d \D \s \S` are rewritten to their Unicode forms, so Python-style patterns written by an agent work as expected. Lookarounds and backreferences are not supported.
+- Regexes use RE2. `\w \W \d \D \s \S` are rewritten to their Unicode forms, so Perl-style patterns written by an agent work as expected. Lookarounds and backreferences are not supported.
 - Output is grouped by file as `line: text` (max 200 lines, lines cut at 200 characters); `files_only` lists up to 300 files with match counts.
 
 A trigram FTS index was tested as a third RRF ranker for substring matches: section MRR dropped from 0.622 to 0.613 and document MRR from 0.745 to 0.722, while R@5 rose from 0.712 to 0.769. It was not adopted; `grep` covers that need on demand.

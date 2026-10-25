@@ -10,7 +10,7 @@ import (
 	"github.com/skromesch/docgraph/internal/hashing"
 	"github.com/skromesch/docgraph/internal/model"
 	"github.com/skromesch/docgraph/internal/parse"
-	"github.com/skromesch/docgraph/internal/pyutil"
+	"github.com/skromesch/docgraph/internal/textutil"
 )
 
 const PathSep = " > "
@@ -41,7 +41,7 @@ func joinText(ls []line) string {
 	return strings.Join(parts, "\n")
 }
 
-func blank(s string) bool { return pyutil.Strip(s) == "" }
+func blank(s string) bool { return textutil.Strip(s) == "" }
 
 // blocks splits lines into paragraph / code / table blocks.
 func blocks(lines []line) [][]line {
@@ -74,7 +74,7 @@ func blocks(lines []line) [][]line {
 			cur = append(cur, ln)
 			continue
 		}
-		isTable := strings.HasPrefix(pyutil.LStrip(ln.text), "|")
+		isTable := strings.HasPrefix(textutil.LStrip(ln.text), "|")
 		if inTable && !isTable {
 			flush()
 		}

@@ -19,9 +19,9 @@ import (
 	"github.com/skromesch/docgraph/internal/embed"
 	"github.com/skromesch/docgraph/internal/index"
 	"github.com/skromesch/docgraph/internal/model"
-	"github.com/skromesch/docgraph/internal/pyutil"
 	"github.com/skromesch/docgraph/internal/search"
 	"github.com/skromesch/docgraph/internal/store"
+	"github.com/skromesch/docgraph/internal/textutil"
 )
 
 // ConfidenceText is the first line of hybrid search output.
@@ -296,7 +296,7 @@ func (s *Service) readDocument(p string, startLine, endLine int) string {
 	if err != nil {
 		return "Read failed: " + err.Error()
 	}
-	lines := pyutil.SplitLines(pyutil.DecodeFile(raw))
+	lines := textutil.SplitLines(textutil.DecodeFile(raw))
 	start := max(1, startLine)
 	end := len(lines)
 	if endLine > 0 {
@@ -348,7 +348,7 @@ func (s *Service) listDocuments(glob string) string {
 	return strings.Join(hits, "\n") + more
 }
 
-// fnmatch mirrors Python's fnmatch.fnmatch on POSIX: '*' also matches '/'.
+// fnmatch is a shell-style glob match: '*' also matches '/'.
 func fnmatch(pattern, name string) bool {
 	// path.Match's '*' stops at '/', so translate '*' to a sequence of segment wildcards
 	ok, err := path.Match(pattern, name)

@@ -1,5 +1,5 @@
 // Package parse turns a file's text into a flat list of sections.
-// It is a line-by-line port of docgraph/parser (see docs/CHUNKING.md).
+// See docs/CHUNKING.md.
 package parse
 
 import (
@@ -9,7 +9,7 @@ import (
 
 	"golang.org/x/text/unicode/norm"
 
-	"github.com/skromesch/docgraph/internal/pyutil"
+	"github.com/skromesch/docgraph/internal/textutil"
 )
 
 // Section is a contiguous line range with a heading hierarchy.
@@ -75,7 +75,7 @@ func Stem(p string) string {
 // '-' = space, '%2D' = '-'.
 func TitleFromPath(p string) string {
 	stem := norm.NFC.String(Stem(p))
-	t := norm.NFC.String(pyutil.Strip(pyutil.Unquote(strings.ReplaceAll(stem, "-", " "))))
+	t := norm.NFC.String(textutil.Strip(textutil.Unquote(strings.ReplaceAll(stem, "-", " "))))
 	if t == "" {
 		return stem
 	}
@@ -86,7 +86,7 @@ var lineBreak = regexp.MustCompile(`\r\n|\r|\n`)
 
 // SplitLines: trailing newlines are removed first; a blank text has no lines.
 func SplitLines(text string) []string {
-	if pyutil.Strip(text) == "" {
+	if textutil.Strip(text) == "" {
 		return nil
 	}
 	return lineBreak.Split(strings.TrimRight(text, "\r\n"), -1)
@@ -94,7 +94,7 @@ func SplitLines(text string) []string {
 
 func anyNonBlank(lines []string) bool {
 	for _, l := range lines {
-		if pyutil.Strip(l) != "" {
+		if textutil.Strip(l) != "" {
 			return true
 		}
 	}

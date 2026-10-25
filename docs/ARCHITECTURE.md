@@ -34,7 +34,7 @@
 | `internal/setup` | pinned, SHA-256-verified downloads of the model and ONNX Runtime |
 | `internal/menu` | interactive `configure` menu (huh), with a plain numbered fallback |
 | `internal/config` | `.docgraph/config.yaml` with defaults |
-| `internal/hashing`, `internal/pyutil` | IDs and hashes; Python-compatible string semantics |
+| `internal/hashing`, `internal/textutil` | IDs and hashes; Unicode string semantics |
 | `cmd/docgraph` | CLI (cobra); only wires the packages together |
 
 ## Key decisions

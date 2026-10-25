@@ -7,18 +7,18 @@ import (
 
 	"github.com/skromesch/docgraph/internal/config"
 	"github.com/skromesch/docgraph/internal/model"
-	"github.com/skromesch/docgraph/internal/pyutil"
 	"github.com/skromesch/docgraph/internal/store"
+	"github.com/skromesch/docgraph/internal/textutil"
 )
 
-var wordRE = regexp.MustCompile(`[` + pyutil.Word + `]+`)
+var wordRE = regexp.MustCompile(`[` + textutil.Word + `]+`)
 
 // BuildMatchQuery turns free text into an FTS5 MATCH expression: Unicode word
 // terms, lowercased, de-duplicated, each quoted (FTS5 operators in the input are
 // never interpreted), optionally truncated to prefix queries, joined with OR.
 func BuildMatchQuery(query string, prefixLen, minTermLen int) string {
 	var terms []string
-	for _, word := range wordRE.FindAllString(pyutil.Lower(query), -1) {
+	for _, word := range wordRE.FindAllString(textutil.Lower(query), -1) {
 		runes := []rune(word)
 		if len(runes) < minTermLen {
 			continue

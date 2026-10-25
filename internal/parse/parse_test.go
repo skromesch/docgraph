@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-// Expected values in testdata/parse_cases.json were produced by the original Python implementation.
+// Expected values in testdata/parse_cases.json pin the parser's titles and section ranges.
 type cases struct {
 	Titles map[string]string `json:"titles"`
 	MD     map[string]struct {

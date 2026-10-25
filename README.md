@@ -175,7 +175,7 @@ mise run dist v0.1.0  # release archives + checksums.txt into dist/
 
 mise also sets the cgo flags and the `sqlite_fts5` build tag, so plain `go build` and `go test` work inside the project.
 
-Tests run on a small fixture wiki (`testdata/fixtures/wiki`). Golden files in `testdata/golden` pin chunking, index rows, BM25 and hybrid rankings, tool outputs and embedding vectors. DocGraph started as a Python prototype; this Go version was verified against it byte for byte, and the goldens now guard against regressions.
+Tests run on a small fixture wiki (`testdata/fixtures/wiki`). Golden files in `testdata/golden` pin chunking, index rows, BM25 and hybrid rankings, tool outputs and embedding vectors. They guard against regressions.
 
 `mise run dist` builds darwin/arm64 natively, and linux/amd64 and linux/arm64 in `golang:<ver>-bookworm` containers (Docker), using daulet/tokenizers' prebuilt `libtokenizers.a`. Upload the archives and `checksums.txt` to a GitHub release; `install.sh` picks them up.
 

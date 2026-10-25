@@ -1,4 +1,4 @@
-package pyutil
+package textutil
 
 import (
 	"encoding/json"
@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestLowerMatchesPython(t *testing.T) {
+func TestLowerUnicode(t *testing.T) {
 	data, err := os.ReadFile("../../testdata/lower_cases.json")
 	if err != nil {
 		t.Fatal(err)
